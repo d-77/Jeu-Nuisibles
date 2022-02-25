@@ -49,7 +49,6 @@ public class Map implements GlobalInterface {
 		//ansi escape console: colors!!!
 		for(int i = 0; i < this.length; i++) {
 			for(int j = 0; j < this.height; j++) {
-			//System.out.print(((arenaMap[i][j]).getAnimalList().get(0).getType()));
 				System.out.print((arenaMap[i][j]).display());
 			}
 			System.out.println();

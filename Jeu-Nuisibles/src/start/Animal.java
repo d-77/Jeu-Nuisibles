@@ -119,9 +119,46 @@ public class Animal implements GlobalInterface {
 				" speed:" + this.speed ;
 	}
 	
-	// perform a random movement
-	public void movement() {
-		TheGblVars.echoDebug(3, "starting");
+	// compute a random movement based on the characteristics of the actor
+	public int[] movement() {
+		
+		int[] theResult = new int[2];
+		int shift_x = 0;
+		int shift_y = 0;
+		int direction_y = 0; // -1 or 1 to go up or down
+		
+		if ((Math.random() - 0.5) >= 0) {
+			direction_y = 1;
+		} else {
+			direction_y = -1;
+		}
+			
+		shift_x =  (int) (Math.random() * (2* this.speed) - this.speed );
+		shift_y = direction_y * (this.speed - Math.abs(shift_x));
+		theResult[0] = shift_x;
+		theResult[1] = shift_y;
+		TheGblVars.echoDebug(4, "speed s_x s_y dir_y: " +
+				this.speed +", "+ shift_x +", "+ shift_y +", "+ direction_y);
+
+		return theResult;
+		
+		/*
+		 * //TODO déplacer ce code dans Ecosystem class
+		
+		// compute the new coordinates of the actor
+		int new_x;
+		int new_y;
+		new_x = this.x + shift_x;
+		new_y = this.y + shift_y;
+		switch (this.type) {
+		case zomby:
+			new_x = Math.min(new_x, new_y)
+			break;
+
+		default:
+			break;
+		}
+		 */
 	}
 	
 	//commit death of the animal

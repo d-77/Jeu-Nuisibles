@@ -19,6 +19,7 @@ public class Ecosystem implements GlobalInterface {
 	private int cycleCounter;
 	private int cycleMax;
 	private Map mapArena;
+	private ArrayList<Animal> AnimalList; 
 		
 	//use a global variables object
 	private GblVars TheGblVars = GblVars.getInstance();
@@ -37,6 +38,7 @@ public class Ecosystem implements GlobalInterface {
 		this.zombiesNumber = zombiesNumber;
 		this.cycleMax = cycleMax;
 		this.mapArena = new Map(length, height);
+		this.AnimalList = new ArrayList<Animal>();
 		animalsGeneration();
 	}
 
@@ -61,28 +63,31 @@ public class Ecosystem implements GlobalInterface {
 		// executed in the constructor of Ecosystem
 		// initialization of the map
 
-		mapArena  = new Map(length, height);
 		Arena[][] m = mapArena.getArenaMap();
-				
-//		// generation of the animals and they are added in a list for each position	
-//		ArrayList<Animal> listAnimals1 = new ArrayList<Animal>();
-//		ArrayList<Animal> listAnimals2 = new ArrayList<Animal>();
-		
+						
 		// generation of ratsNumber rats,  pigeonsNumber, zombiesNumber
 		this.generateActors(actorType.rat, ratsNumber, m);
 		this.generateActors(actorType.pigeon, pigeonsNumber, m);
 		this.generateActors(actorType.zomby, zombiesNumber, m);
 		
-//		//TODO faire les boucles for 
-//		listAnimals1.add(new Animal(actorType.rat, 2, 1, 0, 0));
-//		listAnimals2.add(new Animal(actorType.pigeon, 2, 1, 1, 1));
-		
-		// set the animals into the map
-		//TODO parcourir la liste listAnimals et positionner dans la map
-//		m[0][0].setAnimalList(listAnimals1);
-//		m[1][1].setAnimalList(listAnimals2);
-//		TheGblVars.echoDebug(3, ""+ m[0][0].getAnimalList().get(0).getType());
-//		TheGblVars.echoDebug(3, ""+ m[1][1].getAnimalList().get(0).getType());
+		showRemainingAnimals();
+		/* debug
+		for (Animal animal : this.AnimalList) {
+			animal.movement();//debug purpose
+		}
+		for (Animal animal : this.AnimalList) {
+			animal.movement();//debug purpose
+		}
+		for (Animal animal : this.AnimalList) {
+			animal.movement();//debug purpose
+		}
+		for (Animal animal : this.AnimalList) {
+			animal.movement();//debug purpose
+		}
+		for (Animal animal : this.AnimalList) {
+			animal.movement();//debug purpose
+		}
+		*/
 	}
 	
 	/*
@@ -115,7 +120,8 @@ public class Ecosystem implements GlobalInterface {
 			theRoom = availableRoom(); 
 			//TODO manage the case of there isn't available room 
 			MyPet = new Animal(type, theSpeed(type), 1, theRoom[0], theRoom[1]);
-			m[theRoom[0]][theRoom[1]].addAnimal(MyPet);
+			m[theRoom[0]][theRoom[1]].addAnimal(MyPet); // put the animal in the map
+			this.AnimalList.add(MyPet); // add the same animal in a list in order to get an easy access 
 		}
 	}
 
@@ -139,6 +145,15 @@ public class Ecosystem implements GlobalInterface {
 		return calcul;
 	}
 	
+	// Display all the remainin animals
+	private void showRemainingAnimals() {
+		String TheResult = "";
+		for (Animal animal : this.AnimalList) {
+			TheResult = TheResult + animal.getType()+ " ";
+		}
+		System.out.println(TheResult);
+	}
+
 	
 
 	/**
