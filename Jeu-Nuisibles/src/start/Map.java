@@ -1,10 +1,14 @@
 package start;
 
-public class Map {
+public class Map implements GlobalInterface {
 	
 	private int length;
 	private int height;
 	private Arena[][] arenaMap; 
+	
+	//use a global variables object
+	private GblVars TheGblVars = GblVars.getInstance();
+
 	
 	public Map(int length, int height) {
 	
@@ -13,24 +17,22 @@ public class Map {
 		this.arenaMap = new Arena[length][height];
 		mapInitialization();
 	}
-	
+	//initialize the map with an Arena object for each element of the array (the map)
 	public void mapInitialization() {
 		
 		for(int i = 0; i < this.length; i++) {
 			for(int j = 0; j < this.height; j++) {
-				System.out.println("mapIniztalization");
 				this.arenaMap[i][j] = new Arena();
-				System.out.println("mapIniztalization2");
 			}
 		}
 		
 	}
 	
-	public void displayMap() {
-		System.out.println("Show map");
-		for(int i = 0; i < this.length; i++) {
+	public void display() {
+		TheGblVars.echoDebug(4, "enter in Map.display");
+		for(int i = 0; i < this.height; i++) {
 			for(int j = 0; j < this.length; j++) {
-				//System.out.print("i,j " + i +","+j +" - ");	
+				//TODO next!!!	
 			System.out.print(((arenaMap[i][j]).getAnimalList().get(0).getType()));
 			}
 			System.out.println();

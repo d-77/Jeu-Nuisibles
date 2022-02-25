@@ -1,16 +1,18 @@
 package start;
 
-public class Animal {
+public class Animal implements GlobalInterface {
 	
 	private static int counter = 0;
 	private static int id;
-	private String type;
+	private actorType type;
 	private int speed;
 	private int life;
 	private int x;
 	private int y;
 	
-	public Animal(String type, int speed, int life, int x, int y){
+	// Constructors
+	
+	public Animal(actorType type, int speed, int life, int x, int y){
 		
 		id = counter;
 		counter++;
@@ -21,16 +23,8 @@ public class Animal {
 		this.y = y;
 	}
 	
-	public String toString() {
-		return this.type;
-	}
+	// setters and getters
 	
-	public String getType() {
-		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
-	}
 	public int getSpeed() {
 		return speed;
 	}
@@ -56,14 +50,55 @@ public class Animal {
 		this.y = y;
 	}
 	
+	/**
+	 * @return the id
+	 */
+	public static int getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public static void setId(int id) {
+		Animal.id = id;
+	}
+	
+	/**
+	 * @return the type
+	 */
+	public actorType getType() {
+		return type;
+	}
+	
+	/**
+	 * @param type the type to set
+	 */
+	public void setType(actorType type) {
+		this.type = type;
+	}
+	
+	
+	// methods
+
+
+	// displays the attributes 
+	public String display() {
+		return this.type + " x: " + this.x + " y: " + this.y + " life : " + this.life +
+				" speed:" + this.speed ;
+	}
+	
+	// perform a random movement
 	public void movement() {
 	System.out.println("Movement");
 	}
 	
+	//commit death of the animal
 	public void death() {
 	System.out.println("Death");
 	}
 	
+	// transform the animal to a new type
 	public void transform() {
 	System.out.println("Transform");
 	}

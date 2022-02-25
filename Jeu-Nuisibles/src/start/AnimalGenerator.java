@@ -1,6 +1,6 @@
 package start;
 
-public class AnimalGenerator {
+public class AnimalGenerator implements GlobalInterface {
 
 	
 	public void run() {

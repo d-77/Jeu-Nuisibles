@@ -3,7 +3,7 @@ package start;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Arena {
+public class Arena implements GlobalInterface {
 	
 	
 	private List<Animal> animalList ;
