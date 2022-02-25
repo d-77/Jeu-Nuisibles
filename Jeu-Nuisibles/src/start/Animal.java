@@ -2,6 +2,9 @@ package start;
 
 public class Animal implements GlobalInterface {
 	
+	//use a global variables object
+	private GblVars TheGblVars = GblVars.getInstance();	
+
 	private static int counter = 0;
 	private static int id;
 	private actorType type;
@@ -79,18 +82,46 @@ public class Animal implements GlobalInterface {
 	}
 	
 	
-	// methods
+	/* 
+	 * 		Methods
+	 */
+	
+	
+	/**
+	 * 
+	 * @return
+	 * returns the graphic representation of the animal
+	 */
+	public String display() {
+		
+		String theResult;
 
+		switch (this.type) {
+		case zomby:
+			theResult = "Z";
+			break;
+		case rat:
+			theResult = "R";
+			break;
+		case pigeon:
+			theResult = "P";
+			break;
+		default:
+			theResult = "Error-type";
+			break;
+		}
+		return theResult;
+	}
 
 	// displays the attributes 
-	public String display() {
+	public String displayAttributes() {
 		return this.type + " x: " + this.x + " y: " + this.y + " life : " + this.life +
 				" speed:" + this.speed ;
 	}
 	
 	// perform a random movement
 	public void movement() {
-	System.out.println("Movement");
+		TheGblVars.echoDebug(3, "starting");
 	}
 	
 	//commit death of the animal

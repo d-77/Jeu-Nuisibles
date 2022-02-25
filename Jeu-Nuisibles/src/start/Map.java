@@ -8,7 +8,10 @@ public class Map implements GlobalInterface {
 	
 	//use a global variables object
 	private GblVars TheGblVars = GblVars.getInstance();
-
+	
+	/*
+	 * 		Constructors
+	 */
 	
 	public Map(int length, int height) {
 	
@@ -17,6 +20,11 @@ public class Map implements GlobalInterface {
 		this.arenaMap = new Arena[length][height];
 		mapInitialization();
 	}
+
+	/*
+	 * 		Methods
+	 */
+	
 	//initialize the map with an Arena object for each element of the array (the map)
 	public void mapInitialization() {
 		
@@ -28,16 +36,30 @@ public class Map implements GlobalInterface {
 		
 	}
 	
+	/*
+	 * 		add an animal into the map in the box x,y
+	 */
+	
+	public void addAnimal(Animal dude, int x, int y) {
+		this.arenaMap[x][y].addAnimal(dude);
+	}
+	
 	public void display() {
-		TheGblVars.echoDebug(4, "enter in Map.display");
-		for(int i = 0; i < this.height; i++) {
-			for(int j = 0; j < this.length; j++) {
-				//TODO next!!!	
-			System.out.print(((arenaMap[i][j]).getAnimalList().get(0).getType()));
+		TheGblVars.echoDebug(5, "enter in Map.display"); //5 no display
+		//ansi escape console: colors!!!
+		for(int i = 0; i < this.length; i++) {
+			for(int j = 0; j < this.height; j++) {
+			//System.out.print(((arenaMap[i][j]).getAnimalList().get(0).getType()));
+				System.out.print((arenaMap[i][j]).display());
 			}
 			System.out.println();
 		}
 	}
+	
+	
+	/*
+	 * 		Setters & Getters
+	 */
 	
 	public int getLength() {
 		return length;
