@@ -55,9 +55,9 @@ public class Ecosystem implements GlobalInterface {
 		this.cycleCounter = 1;
 		while (noMoreCombats == true || (this.cycleCounter <= this.cycleMax)) {
 			// one cycle loop
-			display();
+			//display();
 			for (Animal animal : this.AnimalList) {
-				//TODO animal.move();//debug purpose
+				animal.move(this.length,this.height);//debug purpose
 			}
 			this.cycleCounter++;
 			// wait cycleDuration ms
@@ -156,6 +156,8 @@ public class Ecosystem implements GlobalInterface {
 	 *  determines the speed of each kind of actor
 	 * @param type
 	 * @return the speed
+	 * 
+	 * The speed value must be less than min of the length and height of the map
 	 */
 	public int theSpeed(actorType type ) {
 		int calcul = 0;

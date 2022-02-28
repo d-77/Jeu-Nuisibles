@@ -118,13 +118,19 @@ public class Animal implements GlobalInterface {
 				" speed:" + this.speed ;
 	}
 	
-	/*
+	/**
+	 *
 	 *  compute a random move based on the characteristics of the actor
 	 *  the move must remains in the map: 0 < length and 0 < height
+	 *  
+	 *  the new x,y coordinates are computed, the previous ones are updated
+	 *  
+	 * @param lenght (set the x border of the map)
+	 * @param height (set the y border of the map)
+	 *
 	 */
-	public int[] move(int lenght, int height) {
+	public void move(int lenght, int height) {
 		
-		int[] theResult = new int[2];
 		int shift_x = 0;
 		int shift_y = 0;
 		int direction_y = 0; // -1 or 1 to go up or down
@@ -159,14 +165,14 @@ public class Animal implements GlobalInterface {
 			new_y = bounceBack(new_y, height);
 			break;
 		}
-		
-		theResult[0] = new_x;
-		theResult[1] = new_y;
-		TheGblVars.echoDebug(4, "speed s_x s_y dir_y: " +
+		this.previous_x = this.x;
+		this.previous_y = this.y;
+		this.x = new_x;
+		this.y = new_y;
+		TheGblVars.echoDebug(1, "speed s_x s_y dir_y: " +
 				this.speed +", "+ shift_x +", "+ shift_y +", "+ direction_y);
-		TheGblVars.echoDebug(4, "new_x, new_y: " +
+		TheGblVars.echoDebug(1, "new_x, new_y: " +
 				new_x +", "+ new_y);
-		return theResult;
 	}
 	
 	/*
@@ -175,17 +181,17 @@ public class Animal implements GlobalInterface {
 	 */
 	public int bounceBack(int coord, int border) {
 		int theResult = -1; // generates an error must be between 0 and border
-		if ((coord < border) && (coord < 0))  {
+		if ((coord < border) && (coord >= 0))  {
 			//coord is in the map
 			theResult = coord;
 		} else {
 			if (coord < 0) {
 				theResult = - coord;
 			} else { // coord > border
-				theResult = border - (coord - border);
+				theResult = 2 * border - coord - 2;
 			} // end of if (coord < 0)
 		} // end of if ((coord < border) and (coord < 0))
-		if ((theResult < 0) || (theResult >= border)){
+		if ((theResult < 0) || (theResult >= border )){
 			TheGblVars.echoDebug(0, "Error, the new coord is out of the map: " + theResult);
 		}
 		return theResult;
