@@ -36,14 +36,27 @@ public class Map implements GlobalInterface {
 		
 	}
 	
-	/*
-	 * 		add an animal into the map in the box x,y
+	/**
+	 * add an animal into the map in the box x,y 
+	 * The coordinates are known by the actor
+	 * 
+	 * @param dude
+	 * 
 	 */
-	
-	public void addAnimal(Animal dude, int x, int y) {
-		this.arenaMap[x][y].addAnimal(dude);
+	public void addAnimal(Animal dude) {
+		this.arenaMap[dude.getX()][dude.getY()].addAnimal(dude);
 	}
 	
+	/**
+	 * remove an animal from the map
+	 * The coordinates are known by the actor
+	 *
+	 * @param dude
+	 * 
+	 */
+	public void removeAnimal(Animal dude) {
+		this.arenaMap[dude.getX()][dude.getY()].removeAnimal(dude);
+	}
 	public void display() {
 		TheGblVars.echoDebug(5, "enter in Map.display"); //5 no display
 		//ansi escape console: colors!!!

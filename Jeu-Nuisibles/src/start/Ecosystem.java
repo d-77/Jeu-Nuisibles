@@ -57,8 +57,15 @@ public class Ecosystem implements GlobalInterface {
 			// one cycle loop
 			//display();
 			for (Animal animal : this.AnimalList) {
+				//remove the actor from the arena
+				this.mapArena.removeAnimal(animal);
 				animal.move(this.length,this.height);//debug purpose
+				//add the the actor to its new arena
+				TheGblVars.echoDebug(4, "move: " + animal.displayAttributes());
+				this.mapArena.addAnimal(animal);
 			}
+			System.out.println();
+			this.display();
 			this.cycleCounter++;
 			// wait cycleDuration ms
 			try  { Thread.sleep(cycleDuration); } catch (Exception e)  { } 

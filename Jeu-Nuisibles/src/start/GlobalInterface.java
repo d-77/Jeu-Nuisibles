@@ -50,7 +50,7 @@ public interface GlobalInterface {
 	/**
 	 * duration of one cycle in ms
 	 */
-	public static final long cycleDuration = 1000;
+	public static final long cycleDuration = 1;
 	
 	//TODO définir les constantes des vitesses de chaque acteur
 	

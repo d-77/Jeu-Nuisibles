@@ -26,7 +26,6 @@ public class Arena implements GlobalInterface  {
 	public List<Animal> getAnimalList() {
 		return animalList;
 	}
-
 	public void setAnimalList(List<Animal> animalList) {
 		this.animalList = animalList;
 	}
@@ -40,7 +39,7 @@ public class Arena implements GlobalInterface  {
 		// TODO be implemented
 	}
 
-	/*
+	/**
 	 * displays a symbol (a character) to represent what is in the arena (Z for a zomby,
 	 *  R for a Rat, etc and a number when there 2 or more actors in the arena
 	 *  it depends on the number of animals in the arena:
@@ -48,7 +47,11 @@ public class Arena implements GlobalInterface  {
 	 *  	1: there is an animal => display its representation
 	 *  	2: there are many animals => a fight should occur 
 	 *  		=> display a represention of a fight, at least a number (of animals)
+	 * 
+	 * @return	a representation of the status of the arena
+	 *
 	 */
+
 	public String display() {
 		String theResult = "error-arrena";
 		this.TheGblVars.echoDebug(4, "starting");
@@ -60,6 +63,8 @@ public class Arena implements GlobalInterface  {
 				theResult = this.animalList.get(0).display(); // display the animal representation
 			} else { //more than 1 animal in the arena
 				theResult = displayFight(this.animalList.size());
+				TheGblVars.echoDebug(4, "There are more than one animal:" + theResult);
+				//throw new RuntimeException("This is thrown for debug purpose");
 			}
 		} // end of if this.animalList.isEmpty()
 
@@ -77,15 +82,33 @@ public class Arena implements GlobalInterface  {
 		return nbAnimals.toString();
 	}
 
-	/*
+	/**
 	 * 	add an animal into the arena
 	 */
 	public void addAnimal(Animal dude) {
 		this.animalList.add(dude);
 	}
+	/**
+	 * remove an animal from the arena
+	 * @param dude
+	 */
+	public void removeAnimal(Animal dude) {
+		
+		if (this.animalList.remove(dude)) {
+			TheGblVars.echoDebug(4," the animal is removed");
+		}else {
+			TheGblVars.echoDebug(0," error: the animal is not removed\n The animal : "
+					+ dude.displayAttributes());
+		}
+	}
 	
-	/*
+
+	
+	/**
 	 * Test if the arena is empty
+	 *
+	 * @return
+	 * 
 	 */
 	public boolean isEmpty() {
 		TheGblVars.echoDebug(4,"start " + this.animalList.isEmpty());

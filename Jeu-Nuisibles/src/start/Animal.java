@@ -154,8 +154,8 @@ public class Animal implements GlobalInterface {
 		switch (this.type) {
 		case ZOMBI:
 			// a zombi stays stacked to the border, until he changes of direction
-			new_x = Math.min(new_x, lenght - 1);
-			new_y = Math.min(new_y, height - 1);
+			new_x = Math.max(0, Math.min(new_x, lenght - 1));
+			new_y = Math.max(0, Math.min(new_y, height - 1));
 			// TODO should create a method for the zombi move
 			break;
 
@@ -169,9 +169,9 @@ public class Animal implements GlobalInterface {
 		this.previous_y = this.y;
 		this.x = new_x;
 		this.y = new_y;
-		TheGblVars.echoDebug(1, "speed s_x s_y dir_y: " +
+		TheGblVars.echoDebug(4, "speed s_x s_y dir_y: " +
 				this.speed +", "+ shift_x +", "+ shift_y +", "+ direction_y);
-		TheGblVars.echoDebug(1, "new_x, new_y: " +
+		TheGblVars.echoDebug(4, "new_x, new_y: " +
 				new_x +", "+ new_y);
 	}
 	
