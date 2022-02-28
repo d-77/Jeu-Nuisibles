@@ -1,20 +1,10 @@
 package start;
 
-import java.util.ArrayList;
-
 public class Map implements GlobalInterface {
 	
 	private int length;
 	private int height;
-	private ArrayList<ArrayList<Arena>> arenaMap;
-	// private ArrayList<Arena>[] arenaMap; //an array of lists of arenas Pas possible 
-	// de faire un tableau de listes car une liste n'a pas de taille fixe
-	//voir https://community.oracle.com/tech/developers/discussion/2062620/cannot-create-a-generic-array-of-arraylist
-	
-	// http://blog.paumard.org/cours/java-api/chap01-api-collection-list.html
-	// https://eticweb.info/tutoriels-java/deplacer-des-elements-dans-un-arraylist/
-	// https://www.developpez.net/forums/d1281945/java/general-java/liste-liste-java/
-	private Arena arenaTmp; // a working variable
+	private Arena[][] arenaMap; 
 	
 	//use a global variables object
 	private GblVars TheGblVars = GblVars.getInstance();
@@ -27,9 +17,7 @@ public class Map implements GlobalInterface {
 	
 		this.length = length;
 		this.height = height;
-		this.arenaMap = new ArrayList<ArrayList<Arena>>();
-		this.arenaTmp = new Arena();
-		
+		this.arenaMap = new Arena[length][height];
 		mapInitialization();
 	}
 
@@ -37,35 +25,31 @@ public class Map implements GlobalInterface {
 	 * 		Methods
 	 */
 	
-	/**
-	 * initialize the map with an Arena list for each line of the map
-	 */
+	//initialize the map with an Arena object for each element of the array (the map)
 	public void mapInitialization() {
-		//TODO
-		for(int i = 0; i < this.height; i++) {
-			this.arenaMap.add(i, new ArrayList<Arena>()) ;
-		}		
+		
+		for(int i = 0; i < this.length; i++) {
+			for(int j = 0; j < this.height; j++) {
+				this.arenaMap[i][j] = new Arena();
+			}
+		}
+		
 	}
 	
-	/**
-	 * 	add an animal into the map
-	 * 
-	 * @param dude
-	 * 
+	/*
+	 * 		add an animal into the map in the box x,y
 	 */
-	public void addAnimal(Animal dude) {
-		this.arenaMap[dude.getY()].addAnimal(dude);
+	
+	public void addAnimal(Animal dude, int x, int y) {
+		this.arenaMap[x][y].addAnimal(dude);
 	}
 	
 	public void display() {
 		TheGblVars.echoDebug(5, "enter in Map.display"); //5 no display
 		//ansi escape console: colors!!!
-		for(int i = 0; i < this.height; i++) {
-			for(int j = 0; j < this.length; j++) {
-				
-				
-				
-				System.out.print((arenaMap[i].l'élementde laliste).display());
+		for(int i = 0; i < this.length; i++) {
+			for(int j = 0; j < this.height; j++) {
+				System.out.print((arenaMap[i][j]).display());
 			}
 			System.out.println();
 		}
