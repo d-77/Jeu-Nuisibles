@@ -2,7 +2,7 @@ package start;
 
 import java.util.ArrayList;
 
-public class Map implements GlobalInterface {
+public class Map_listOfLists implements GlobalInterface {
 	
 	private int length;
 	private int height;
@@ -14,7 +14,7 @@ public class Map implements GlobalInterface {
 	// http://blog.paumard.org/cours/java-api/chap01-api-collection-list.html
 	// https://eticweb.info/tutoriels-java/deplacer-des-elements-dans-un-arraylist/
 	// https://www.developpez.net/forums/d1281945/java/general-java/liste-liste-java/
-	private Arena arenaTmp; // a working variable
+////	private Arena arenaTmp; // a working variable
 	
 	//use a global variables object
 	private GblVars TheGblVars = GblVars.getInstance();
@@ -23,12 +23,12 @@ public class Map implements GlobalInterface {
 	 * 		Constructors
 	 */
 	
-	public Map(int length, int height) {
+	public Map_listOfLists(int length, int height) {
 	
 		this.length = length;
 		this.height = height;
 		this.arenaMap = new ArrayList<ArrayList<Arena>>();
-		this.arenaTmp = new Arena();
+////		this.arenaTmp = new Arena();
 		
 		mapInitialization();
 	}
@@ -54,7 +54,7 @@ public class Map implements GlobalInterface {
 	 * 
 	 */
 	public void addAnimal(Animal dude) {
-		this.arenaMap[dude.getY()].addAnimal(dude);
+	//	this.arenaMap[dude.getY()].addAnimal(dude);
 	}
 	
 	public void display() {
@@ -65,7 +65,7 @@ public class Map implements GlobalInterface {
 				
 				
 				
-				System.out.print((arenaMap[i].l'élementde laliste).display());
+	//			System.out.print((arenaMap[i].l'élementde laliste).display());
 			}
 			System.out.println();
 		}
@@ -88,13 +88,13 @@ public class Map implements GlobalInterface {
 	public void setHeight(int height) {
 		this.height = height;
 	}
-
+/*
 	public Arena[][] getArenaMap() {
 		return arenaMap;
 	}
-
+*/
 	public void setArenaMap(Arena[][] arenaMap) {
-		this.arenaMap = arenaMap;
+//		this.arenaMap = arenaMap;
 	}
 
 	

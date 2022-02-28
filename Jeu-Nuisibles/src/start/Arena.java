@@ -16,7 +16,7 @@ public class Arena implements GlobalInterface  {
 	 */
 	
 	public Arena(){
-		animalList = new ArrayList<Animal>();
+		this.animalList = new ArrayList<Animal>();
 	}
 	
 	/*
