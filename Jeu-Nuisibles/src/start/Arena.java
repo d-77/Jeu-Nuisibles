@@ -37,19 +37,22 @@ public class Arena implements GlobalInterface  {
 	
 	public void launchCombat(ArrayList<Animal> fighters) {
 		//Cas Liste vide + Cas 1 + Cas plusieurs
-		
+		// TODO be implemented
 	}
-	
+
+	/*
+	 * displays a symbol (a character) to represent what is in the arena (Z for a zomby,
+	 *  R for a Rat, etc and a number when there 2 or more actors in the arena
+	 *  it depends on the number of animals in the arena:
+	 *  	0: it's empty so display an empty box
+	 *  	1: there is an animal => display its representation
+	 *  	2: there are many animals => a fight should occur 
+	 *  		=> display a represention of a fight, at least a number (of animals)
+	 */
 	public String display() {
 		String theResult = "error-arrena";
 		this.TheGblVars.echoDebug(4, "starting");
-		/*
-		 *  it depends on the number of animals in the arena:
-		 *  	0: it's empty so display an empty box
-		 *  	1: there is an animal => display its representation
-		 *  	2: there are many animals => a fight should occur 
-		 *  		=> display a represention of a fight, at least a number (of animals)
-		 */
+
 		if (this.isEmpty()) {
 			theResult = displayEmpty();
 		} else {
@@ -60,9 +63,9 @@ public class Arena implements GlobalInterface  {
 			}
 		} // end of if this.animalList.isEmpty()
 
-		return theResult; //Affichage de la map sur l'arene en question si un zombie = return Z
+		return theResult;
 	}
-	
+
 	public String displayEmpty() {
 		return ".";
 	}
@@ -75,13 +78,15 @@ public class Arena implements GlobalInterface  {
 	}
 
 	/*
-	 * 		add an animal into the arena
+	 * 	add an animal into the arena
 	 */
-	
 	public void addAnimal(Animal dude) {
 		this.animalList.add(dude);
 	}
 	
+	/*
+	 * Test if the arena is empty
+	 */
 	public boolean isEmpty() {
 		TheGblVars.echoDebug(4,"start " + this.animalList.isEmpty());
 		return this.animalList.isEmpty();

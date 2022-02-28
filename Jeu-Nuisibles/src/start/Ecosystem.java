@@ -1,9 +1,9 @@
 package start;
 
-import java.lang.reflect.Array;
+//import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Random;
+//import java.util.Iterator;
+//import java.util.Random;
 
 /**
  * @author daniel.conil
@@ -46,19 +46,39 @@ public class Ecosystem implements GlobalInterface {
 	 * Methods
 	 */
 	
+	/**
+	 * animate the ecosystem until the end (no more combats or cyle max is reached
+	 */
+	public void animate() {
+		boolean noMoreCombats = false;
+		
+		this.cycleCounter = 1;
+		while (noMoreCombats == true || (this.cycleCounter <= this.cycleMax)) {
+			// one cycle loop
+			display();
+			for (Animal animal : this.AnimalList) {
+				//TODO animal.move();//debug purpose
+			}
+			this.cycleCounter++;
+			// wait cycleDuration ms
+			try  { Thread.sleep(cycleDuration); } catch (Exception e)  { } 
+
+		}	
+	}
+	
 	/* 
 	 * Displays the ecosystem
 	 * 
 	 */
 	public void display()
 	{
-		System.out.println("Cycle " + this.cycleCounter +
-				". The survival counters should be shown here");
 		mapArena.display();
-		
+		//TODO add counters: cycle, numbers of actors...
 	}
 	
-	/* Factory of the animals.... */
+	/**
+	 *  Factory of the animals....
+	 */
 	void animalsGeneration() {
 		// executed in the constructor of Ecosystem
 		// initialization of the map
@@ -66,11 +86,11 @@ public class Ecosystem implements GlobalInterface {
 		Arena[][] m = mapArena.getArenaMap();
 						
 		// generation of ratsNumber rats,  pigeonsNumber, zombiesNumber
-		this.generateActors(actorType.rat, ratsNumber, m);
-		this.generateActors(actorType.pigeon, pigeonsNumber, m);
-		this.generateActors(actorType.zomby, zombiesNumber, m);
+		this.generateActors(actorType.RAT, ratsNumber, m);
+		this.generateActors(actorType.PIGEON, pigeonsNumber, m);
+		this.generateActors(actorType.ZOMBI, zombiesNumber, m);
 		
-		showRemainingAnimals();
+		
 		/* debug
 		for (Animal animal : this.AnimalList) {
 			animal.movement();//debug purpose
@@ -90,9 +110,11 @@ public class Ecosystem implements GlobalInterface {
 		*/
 	}
 	
-	/*
-	 * propose randomly a room without an animal
-	 */
+
+	  /**
+	   *  propose randomly an available room ie without an animal
+	   * @return theResult[0] = x; 	theResult[1] = y;
+	   */
 	private int[] availableRoom(){
 		
 		int[] theResult = new int[2];
@@ -111,7 +133,12 @@ public class Ecosystem implements GlobalInterface {
 		return theResult;
 	}
 	
-	// Generates n actors of one type and set them in available rooms into the map
+	/**
+	 *  Generates n actors of one type and set them in available rooms into the map
+	 * @param type
+	 * @param nb
+	 * @param m
+	 */
 	private void generateActors(actorType type, int nb, Arena[][] m) {
 
 		int[] theRoom = new int[2];
@@ -125,17 +152,21 @@ public class Ecosystem implements GlobalInterface {
 		}
 	}
 
-	// determines the speed of each kind of actor
+	/**
+	 *  determines the speed of each kind of actor
+	 * @param type
+	 * @return the speed
+	 */
 	public int theSpeed(actorType type ) {
 		int calcul = 0;
 		switch (type) {
-		case zomby:
+		case ZOMBI:
 			calcul = 1;
 			break;
-		case rat:
+		case RAT:
 			calcul = 2;
 			break;
-		case pigeon:
+		case PIGEON:
 			calcul = 3;
 			break;
 		default:
@@ -145,7 +176,9 @@ public class Ecosystem implements GlobalInterface {
 		return calcul;
 	}
 	
-	// Display all the remainin animals
+	/**
+	 *  Display all the remaining animals
+	 */
 	private void showRemainingAnimals() {
 		String TheResult = "";
 		for (Animal animal : this.AnimalList) {
@@ -153,8 +186,6 @@ public class Ecosystem implements GlobalInterface {
 		}
 		System.out.println(TheResult);
 	}
-
-	
 
 	/**
 	 * Setters and Getters
@@ -190,12 +221,8 @@ public class Ecosystem implements GlobalInterface {
 	public void setZombiesNumber(int zombiesNumber) {
 		this.zombiesNumber = zombiesNumber;
 	}
-	public int getCycleCounter() {
-		return cycleCounter;
-	}
-	public void setCycleCounter(int cycleCounter) {
-		this.cycleCounter = cycleCounter;
-	}
+	public int getCycleCounter() { return cycleCounter; } 
+	// must not be used	  public void setCycleCounter(int cycleCounter) { this.cycleCounter = cycleCounter; }
 	public int getCycleMax() {
 		return cycleMax;
 	}

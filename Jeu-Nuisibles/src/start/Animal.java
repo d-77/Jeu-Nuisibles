@@ -12,8 +12,11 @@ public class Animal implements GlobalInterface {
 	private int life;
 	private int x;
 	private int y;
-	
-	// Constructors
+	private int previous_x;
+	private int previous_y;
+	/*
+	 ******	Constructors
+	*/
 	
 	public Animal(actorType type, int speed, int life, int x, int y){
 		
@@ -24,9 +27,13 @@ public class Animal implements GlobalInterface {
 		this.life = life;
 		this.x = x;
 		this.y = y;
+		this.previous_x = x;
+		this.previous_y = y;
 	}
 	
-	// setters and getters
+	/*
+	 ***** setters and getters
+	*/
 	
 	public int getSpeed() {
 		return speed;
@@ -52,28 +59,24 @@ public class Animal implements GlobalInterface {
 	public void setY(int y) {
 		this.y = y;
 	}
-	
 	/**
 	 * @return the id
 	 */
 	public static int getId() {
 		return id;
 	}
-
 	/**
 	 * @param id the id to set
 	 */
 	public static void setId(int id) {
 		Animal.id = id;
 	}
-	
 	/**
 	 * @return the type
 	 */
 	public actorType getType() {
 		return type;
 	}
-	
 	/**
 	 * @param type the type to set
 	 */
@@ -81,15 +84,11 @@ public class Animal implements GlobalInterface {
 		this.type = type;
 	}
 	
-	
 	/* 
-	 * 		Methods
+	 ******* Methods
 	 */
-	
-	
-	/**
-	 * 
-	 * @return
+		
+	/*
 	 * returns the graphic representation of the animal
 	 */
 	public String display() {
@@ -97,13 +96,13 @@ public class Animal implements GlobalInterface {
 		String theResult;
 
 		switch (this.type) {
-		case zomby:
+		case ZOMBI:
 			theResult = "Z";
 			break;
-		case rat:
+		case RAT:
 			theResult = "R";
 			break;
-		case pigeon:
+		case PIGEON:
 			theResult = "P";
 			break;
 		default:
@@ -119,13 +118,18 @@ public class Animal implements GlobalInterface {
 				" speed:" + this.speed ;
 	}
 	
-	// compute a random movement based on the characteristics of the actor
-	public int[] movement() {
+	/*
+	 *  compute a random move based on the characteristics of the actor
+	 *  the move must remains in the map: 0 < length and 0 < height
+	 */
+	public int[] move(int lenght, int height) {
 		
 		int[] theResult = new int[2];
 		int shift_x = 0;
 		int shift_y = 0;
 		int direction_y = 0; // -1 or 1 to go up or down
+		int new_x;
+		int new_y;
 		
 		if ((Math.random() - 0.5) >= 0) {
 			direction_y = 1;
@@ -135,40 +139,66 @@ public class Animal implements GlobalInterface {
 			
 		shift_x =  (int) (Math.random() * (2* this.speed) - this.speed );
 		shift_y = direction_y * (this.speed - Math.abs(shift_x));
-		theResult[0] = shift_x;
-		theResult[1] = shift_y;
-		TheGblVars.echoDebug(4, "speed s_x s_y dir_y: " +
-				this.speed +", "+ shift_x +", "+ shift_y +", "+ direction_y);
-
-		return theResult;
-		
-		/*
-		 * //TODO déplacer ce code dans Ecosystem class
 		
 		// compute the new coordinates of the actor
-		int new_x;
-		int new_y;
+
 		new_x = this.x + shift_x;
 		new_y = this.y + shift_y;
+		
 		switch (this.type) {
-		case zomby:
-			new_x = Math.min(new_x, new_y)
+		case ZOMBI:
+			// a zombi stays stacked to the border, until he changes of direction
+			new_x = Math.min(new_x, lenght - 1);
+			new_y = Math.min(new_y, height - 1);
+			// TODO should create a method for the zombi move
 			break;
 
 		default:
+			// other actors bounce back
+			new_x = bounceBack(new_x, lenght);
+			new_y = bounceBack(new_y, height);
 			break;
 		}
-		 */
+		
+		theResult[0] = new_x;
+		theResult[1] = new_y;
+		TheGblVars.echoDebug(4, "speed s_x s_y dir_y: " +
+				this.speed +", "+ shift_x +", "+ shift_y +", "+ direction_y);
+		TheGblVars.echoDebug(4, "new_x, new_y: " +
+				new_x +", "+ new_y);
+		return theResult;
+	}
+	
+	/*
+	 * Computes the coordinate after the bounce against the border
+	 * if the coord is in the map returns coord without a modification
+	 */
+	public int bounceBack(int coord, int border) {
+		int theResult = -1; // generates an error must be between 0 and border
+		if ((coord < border) && (coord < 0))  {
+			//coord is in the map
+			theResult = coord;
+		} else {
+			if (coord < 0) {
+				theResult = - coord;
+			} else { // coord > border
+				theResult = border - (coord - border);
+			} // end of if (coord < 0)
+		} // end of if ((coord < border) and (coord < 0))
+		if ((theResult < 0) || (theResult >= border)){
+			TheGblVars.echoDebug(0, "Error, the new coord is out of the map: " + theResult);
+		}
+		return theResult;
 	}
 	
 	//commit death of the animal
 	public void death() {
-	System.out.println("Death");
+		System.out.println("Death");
 	}
 	
 	// transform the animal to a new type
-	public void transform() {
-	System.out.println("Transform");
+	public void transform(actorType type ) {
+		System.out.println("Transform");
 	}
 	
 }
