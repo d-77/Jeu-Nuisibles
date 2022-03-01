@@ -25,7 +25,9 @@ public class Map implements GlobalInterface {
 	 * 		Methods
 	 */
 	
-	//initialize the map with an Arena object for each element of the array (the map)
+	/**
+	 * initialize the map with an Arena object for each element of the array (the map)
+	 */
 	public void mapInitialization() {
 		
 		for(int i = 0; i < this.length; i++) {
@@ -33,7 +35,6 @@ public class Map implements GlobalInterface {
 				this.arenaMap[i][j] = new Arena();
 			}
 		}
-		
 	}
 	
 	/**
@@ -57,9 +58,10 @@ public class Map implements GlobalInterface {
 	public void removeAnimal(Animal dude) {
 		this.arenaMap[dude.getX()][dude.getY()].removeAnimal(dude);
 	}
+	
 	public void display() {
 		TheGblVars.echoDebug(5, "enter in Map.display"); //5 no display
-		//ansi escape console: colors!!!
+
 		for(int i = 0; i < this.length; i++) {
 			for(int j = 0; j < this.height; j++) {
 				System.out.print((arenaMap[i][j]).display());
@@ -67,7 +69,6 @@ public class Map implements GlobalInterface {
 			System.out.println();
 		}
 	}
-	
 	
 	/*
 	 * 		Setters & Getters
@@ -85,15 +86,11 @@ public class Map implements GlobalInterface {
 	public void setHeight(int height) {
 		this.height = height;
 	}
-
 	public Arena[][] getArenaMap() {
 		return arenaMap;
 	}
-
 	public void setArenaMap(Arena[][] arenaMap) {
 		this.arenaMap = arenaMap;
 	}
 
-	
-	
 }

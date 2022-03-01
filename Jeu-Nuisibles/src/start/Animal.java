@@ -6,7 +6,11 @@ public class Animal implements GlobalInterface {
 	private GblVars TheGblVars = GblVars.getInstance();	
 
 	private static int counter = 0;
-	private static int id;
+	private static int [] countersByType;
+	private int id; 
+	/* The id is unique for each type of actor:
+	 * a rat and a pigeon may have the same id '1' for example
+	 */
 	private actorType type;
 	private int speed;
 	private int life;
@@ -14,14 +18,13 @@ public class Animal implements GlobalInterface {
 	private int y;
 	private int previous_x;
 	private int previous_y;
+	
 	/*
 	 ******	Constructors
 	*/
 	
 	public Animal(actorType type, int speed, int life, int x, int y){
 		
-		id = counter;
-		counter++;
 		this.type = type;
 		this.speed = speed;
 		this.life = life;
@@ -29,6 +32,18 @@ public class Animal implements GlobalInterface {
 		this.y = y;
 		this.previous_x = x;
 		this.previous_y = y;
+		// compute the counters
+		counter++; // number of created animals
+		
+		if (countersByType == null) {
+			TheGblVars.echoDebug(1, "countersByType instantiation");
+			// create an array of counters for each type of actors
+			countersByType = new int[actorType.values().length];
+			//initialise the counters to 0
+			for (int i : countersByType) { countersByType[i] = 0; }
+		}
+		id = countersByType[type.ordinal()];
+		countersByType[type.ordinal()] = countersByType[type.ordinal()] + 1; 
 	}
 	
 	/*
@@ -62,14 +77,8 @@ public class Animal implements GlobalInterface {
 	/**
 	 * @return the id
 	 */
-	public static int getId() {
+	public int getId() {
 		return id;
-	}
-	/**
-	 * @param id the id to set
-	 */
-	public static void setId(int id) {
-		Animal.id = id;
 	}
 	/**
 	 * @return the type
@@ -88,8 +97,8 @@ public class Animal implements GlobalInterface {
 	 ******* Methods
 	 */
 		
-	/*
-	 * returns the graphic representation of the animal
+	/**
+	 * @return: the graphic representation of the animal
 	 */
 	public String display() {
 		
@@ -112,7 +121,10 @@ public class Animal implements GlobalInterface {
 		return theResult;
 	}
 
-	// displays the attributes 
+	/**
+	 *  displays the attributes 
+	 * @return
+	 */
 	public String displayAttributes() {
 		return this.type + " x: " + this.x + " y: " + this.y + " life : " + this.life +
 				" speed:" + this.speed ;
@@ -125,8 +137,8 @@ public class Animal implements GlobalInterface {
 	 *  
 	 *  the new x,y coordinates are computed, the previous ones are updated
 	 *  
-	 * @param lenght (set the x border of the map)
-	 * @param height (set the y border of the map)
+	 * @param lenght (the x border of the map)
+	 * @param height (the y border of the map)
 	 *
 	 */
 	public void move(int lenght, int height) {
@@ -175,8 +187,9 @@ public class Animal implements GlobalInterface {
 				new_x +", "+ new_y);
 	}
 	
-	/*
-	 * Computes the coordinate after the bounce against the border
+	/**
+	 * 
+	 * @return : Computes the coordinate after the bounce against the border
 	 * if the coord is in the map returns coord without a modification
 	 */
 	public int bounceBack(int coord, int border) {
@@ -200,11 +213,13 @@ public class Animal implements GlobalInterface {
 	//commit death of the animal
 	public void death() {
 		System.out.println("Death");
+		// TODO
 	}
 	
 	// transform the animal to a new type
 	public void transform(actorType type ) {
 		System.out.println("Transform");
+		// TODO
 	}
 	
 }

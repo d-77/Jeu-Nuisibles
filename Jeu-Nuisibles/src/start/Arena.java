@@ -53,6 +53,12 @@ public class Arena implements GlobalInterface  {
 	 */
 
 	public String display() {
+		
+		//ansi escape console: colors!!!
+		// use the eclipse plugin ansi in console
+		
+		Animal theAnimal;
+		
 		String theResult = "error-arrena";
 		this.TheGblVars.echoDebug(4, "starting");
 
@@ -60,9 +66,11 @@ public class Arena implements GlobalInterface  {
 			theResult = displayEmpty();
 		} else {
 			if (this.animalList.size() == 1) {
-				theResult = this.animalList.get(0).display(); // display the animal representation
+				theAnimal = this.animalList.get(0);
+				// display the animal representation with its id
+				theResult = theAnimal.display() + String.format("%02d",theAnimal.getId()); 
 			} else { //more than 1 animal in the arena
-				theResult = displayFight(this.animalList.size());
+				theResult = ANSI_RED + displayFight(this.animalList.size())+ ANSI_RESET;
 				TheGblVars.echoDebug(4, "There are more than one animal:" + theResult);
 				//throw new RuntimeException("This is thrown for debug purpose");
 			}
@@ -72,14 +80,14 @@ public class Arena implements GlobalInterface  {
 	}
 
 	public String displayEmpty() {
-		return ".";
+		return " . ";
 	}
 	
 	public String displayFight(Integer nbAnimals) {
 		// in case of an animation for example to show a fight
 		// or to show a state of the fight locations before results
 		
-		return nbAnimals.toString();
+		return "*"+nbAnimals.toString()+"*";
 	}
 
 	/**

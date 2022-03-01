@@ -42,12 +42,12 @@ public class Ecosystem implements GlobalInterface {
 		animalsGeneration();
 	}
 
-	/**
+	/*
 	 * Methods
 	 */
 	
 	/**
-	 * animate the ecosystem until the end (no more combats or cyle max is reached
+	 * animate the ecosystem until the end (no more combats or cyleMax is reached
 	 */
 	public void animate() {
 		boolean noMoreCombats = false;
@@ -55,7 +55,9 @@ public class Ecosystem implements GlobalInterface {
 		this.cycleCounter = 1;
 		while (noMoreCombats == true || (this.cycleCounter <= this.cycleMax)) {
 			// one cycle loop
-			//display();
+			this.display();
+			System.out.println(); // one line between 2 screens
+			// the actors move
 			for (Animal animal : this.AnimalList) {
 				//remove the actor from the arena
 				this.mapArena.removeAnimal(animal);
@@ -64,8 +66,9 @@ public class Ecosystem implements GlobalInterface {
 				TheGblVars.echoDebug(4, "move: " + animal.displayAttributes());
 				this.mapArena.addAnimal(animal);
 			}
-			System.out.println();
-			this.display();
+			// the actors fight
+			// display an intermediate screen, where the fights are shown
+			//this.display();
 			this.cycleCounter++;
 			// wait cycleDuration ms
 			try  { Thread.sleep(cycleDuration); } catch (Exception e)  { } 
