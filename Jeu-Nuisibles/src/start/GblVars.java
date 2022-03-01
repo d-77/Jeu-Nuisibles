@@ -18,7 +18,7 @@ public class GblVars implements GlobalInterface {
 		
 	// set manual traces for debug
 	
-	public int dbglvl = 3;
+	public int dbglvl = 1;
 	/*
 	 * 0 no debug info
 	 * 1 critical info

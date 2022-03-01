@@ -1,5 +1,7 @@
 package start;
 
+import start.GlobalInterface.actorType;
+
 public class Animal implements GlobalInterface {
 	
 	//use a global variables object
@@ -23,10 +25,10 @@ public class Animal implements GlobalInterface {
 	 ******	Constructors
 	*/
 	
-	public Animal(actorType type, int speed, int life, int x, int y){
+	public Animal(actorType type, int life, int x, int y){
 		
 		this.type = type;
-		this.speed = speed;
+		this.speed = theSpeed(type);
 		this.life = life;
 		this.x = x;
 		this.y = y;
@@ -36,7 +38,7 @@ public class Animal implements GlobalInterface {
 		counter++; // number of created animals
 		
 		if (countersByType == null) {
-			TheGblVars.echoDebug(1, "countersByType instantiation");
+			TheGblVars.echoDebug(4, "countersByType instantiation");
 			// create an array of counters for each type of actors
 			countersByType = new int[actorType.values().length];
 			//initialise the counters to 0
@@ -98,6 +100,32 @@ public class Animal implements GlobalInterface {
 	 */
 		
 	/**
+	 *  determines the speed of each kind of actor
+	 * @param type
+	 * @return the speed
+	 * 
+	 * The speed value must be less than min of the length and height of the map
+	 */
+	public int theSpeed(actorType type ) {
+		int calcul = 0;
+		switch (type) {
+		case ZOMBI:
+			calcul = 1;
+			break;
+		case RAT:
+			calcul = 2;
+			break;
+		case PIGEON:
+			calcul = 3;
+			break;
+		default:
+			calcul = -1;
+			break;
+		}
+		return calcul;
+	}
+	
+	/**
 	 * @return: the graphic representation of the animal
 	 */
 	public String display() {
@@ -126,7 +154,7 @@ public class Animal implements GlobalInterface {
 	 * @return
 	 */
 	public String displayAttributes() {
-		return this.type + " x: " + this.x + " y: " + this.y + " life : " + this.life +
+		return this.type + " id: " + this.id + " x: " + this.x + " y: " + this.y + " life : " + this.life +
 				" speed:" + this.speed ;
 	}
 	
@@ -212,14 +240,22 @@ public class Animal implements GlobalInterface {
 	
 	//commit death of the animal
 	public void death() {
-		System.out.println("Death");
-		// TODO
+		this.life = 0;
+		TheGblVars.echoDebug(2,"Death of the animal: " + this.id);
 	}
 	
 	// transform the animal to a new type
 	public void transform(actorType type ) {
-		System.out.println("Transform");
-		// TODO
+		
+		if(!this.type.equals(type) ) {
+			TheGblVars.echoDebug(0,"transform the animal : " + this.id + " from : " + this.type + " to " + type);
+			this.type = type;
+			this.speed = theSpeed(type);
+			// set a new id in its new type
+			this.id = countersByType[type.ordinal()];
+			countersByType[type.ordinal()] = countersByType[type.ordinal()] + 1;
+		}
+		//else nothing to do, its type is not changed
 	}
 	
 }

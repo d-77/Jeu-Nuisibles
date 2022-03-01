@@ -4,6 +4,7 @@ package start;
 import java.util.ArrayList;
 //import java.util.Iterator;
 //import java.util.Random;
+import java.util.Iterator;
 
 /**
  * @author daniel.conil
@@ -19,7 +20,7 @@ public class Ecosystem implements GlobalInterface {
 	private int cycleCounter;
 	private int cycleMax;
 	private Map mapArena;
-	private ArrayList<Animal> AnimalList; 
+	private ArrayList<Animal> animalList; 
 		
 	//use a global variables object
 	private GblVars TheGblVars = GblVars.getInstance();
@@ -38,7 +39,7 @@ public class Ecosystem implements GlobalInterface {
 		this.zombiesNumber = zombiesNumber;
 		this.cycleMax = cycleMax;
 		this.mapArena = new Map(length, height);
-		this.AnimalList = new ArrayList<Animal>();
+		this.animalList = new ArrayList<Animal>();
 		animalsGeneration();
 	}
 
@@ -51,14 +52,16 @@ public class Ecosystem implements GlobalInterface {
 	 */
 	public void animate() {
 		boolean noMoreCombats = false;
-		
+		int nbAlivePopulations = 3;
+		ArrayList<Animal> movelList;
+
 		this.cycleCounter = 1;
-		while (noMoreCombats == true || (this.cycleCounter <= this.cycleMax)) {
+		while (noMoreCombats == false || (this.cycleCounter <= this.cycleMax)) {
 			// one cycle loop
 			this.display();
 			System.out.println(); // one line between 2 screens
 			// the actors move
-			for (Animal animal : this.AnimalList) {
+			for (Animal animal : this.animalList) {
 				//remove the actor from the arena
 				this.mapArena.removeAnimal(animal);
 				animal.move(this.length,this.height);//debug purpose
@@ -68,11 +71,29 @@ public class Ecosystem implements GlobalInterface {
 			}
 			// the actors fight
 			// display an intermediate screen, where the fights are shown
-			//this.display();
+			System.out.println("\nFight phase"); // one line between 2 screens
+			this.display();
+			System.out.println(); // one line between 2 screens
+			
+			movelList = this.mapArena.launchFight(); //TODO
+			TheGblVars.echoDebug(2, "size of movelList: " + movelList.size());
+			//replace the animals which are several in the same place
+			for (Iterator iterator = movelList.iterator(); iterator.hasNext();) {
+				Animal animal = (Animal) iterator.next();
+				//DCL TODO 
+				mapArena.relocateAnimal(iterator);
+			}
+			remainingAnimals(); //update the AnimalList after the fights
+			System.out.println(); // one line between 2 screens
+			
+			if (zombiesNumber > 0) {nbAlivePopulations = 1;} else {nbAlivePopulations = 0;}
+			if (ratsNumber > 0) {nbAlivePopulations++;} 
+			if (pigeonsNumber > 0) {nbAlivePopulations++;}
+			noMoreCombats = (nbAlivePopulations == 1); //there is only on kind of actors: they can't fight themselves
+			
 			this.cycleCounter++;
 			// wait cycleDuration ms
 			try  { Thread.sleep(cycleDuration); } catch (Exception e)  { } 
-
 		}	
 	}
 	
@@ -82,8 +103,9 @@ public class Ecosystem implements GlobalInterface {
 	 */
 	public void display()
 	{
+		System.out.println("Cycle " + cycleCounter + ", nb-z: " + zombiesNumber + ", nb-r: " + ratsNumber  +
+				", nb-p: " +  pigeonsNumber );
 		mapArena.display();
-		//TODO add counters: cycle, numbers of actors...
 	}
 	
 	/**
@@ -92,129 +114,113 @@ public class Ecosystem implements GlobalInterface {
 	void animalsGeneration() {
 		// executed in the constructor of Ecosystem
 		// initialization of the map
-
-		Arena[][] m = mapArena.getArenaMap();
 						
 		// generation of ratsNumber rats,  pigeonsNumber, zombiesNumber
-		this.generateActors(actorType.RAT, ratsNumber, m);
-		this.generateActors(actorType.PIGEON, pigeonsNumber, m);
-		this.generateActors(actorType.ZOMBI, zombiesNumber, m);
-		
-		
-		/* debug
-		for (Animal animal : this.AnimalList) {
-			animal.movement();//debug purpose
-		}
-		for (Animal animal : this.AnimalList) {
-			animal.movement();//debug purpose
-		}
-		for (Animal animal : this.AnimalList) {
-			animal.movement();//debug purpose
-		}
-		for (Animal animal : this.AnimalList) {
-			animal.movement();//debug purpose
-		}
-		for (Animal animal : this.AnimalList) {
-			animal.movement();//debug purpose
-		}
-		*/
-	}
-	
-
-	  /**
-	   *  propose randomly an available room ie without an animal
-	   * @return theResult[0] = x; 	theResult[1] = y;
-	   */
-	private int[] availableRoom(){
-		
-		// manage the case of there isn't available room (or is cannot randomly found)
-		int nbAttempts = 0;
-		int maxAttempts = this.length * this.height * 10; // 10 times the map surface is a very good limit
-		
-		int[] theResult = new int[2];
-		Arena[][] m = mapArena.getArenaMap();
-		
-		int x ;
-		int y ;
-		do {
-			nbAttempts++; // stop when nbAttempts > maxAttempts
-			x = (int) (Math.random() * (this.length));
-			y = (int) (Math.random() * (this.height));
-			TheGblVars.echoDebug(4," x,y : " + x + ","+ y);
-		} while ((! (m[x][y].isEmpty())) && (nbAttempts <= maxAttempts)); // empty condition and limited loop
-		if (m[x][y].isEmpty()) {
-			theResult[0] = x;
-			theResult[1] = y;
-		} else {
-			TheGblVars.echoDebug(2, "Error: no available room is found: the numbers of animals may be too large");
-			theResult[0] = -1;
-			theResult[1] = -1;
-		}
-
-		return theResult;
+		this.generateActors(actorType.RAT, ratsNumber);
+		this.generateActors(actorType.PIGEON, pigeonsNumber);
+		this.generateActors(actorType.ZOMBI, zombiesNumber);
 	}
 	
 	/**
 	 *  Generates n actors of one type and set them in available rooms into the map
 	 * @param type
 	 * @param nb
-	 * @param m
 	 */
-	private void generateActors(actorType type, int nb, Arena[][] m) {
+	private void generateActors(actorType type, int nb) {
 
 		int[] theRoom = new int[2];
 		Animal MyPet;
 		for (int j = 0; j < nb; j++) {
-			theRoom = availableRoom(); 
+			theRoom = mapArena. availableRoom(this.length / 2, this.height / 2, Math.max(this.length, this.height));
+			// the area chosen is the entire map.
 			// check the unavailable room case
 			if (theRoom[0] != -1) {
 				//there is an available room
-				MyPet = new Animal(type, theSpeed(type), 1, theRoom[0], theRoom[1]);
-				m[theRoom[0]][theRoom[1]].addAnimal(MyPet); // put the animal in the map
-				this.AnimalList.add(MyPet); // add the same animal in a list in order to get an easy access 
+				MyPet = new Animal(type, 1, theRoom[0], theRoom[1]);
+				this.mapArena.addAnimal(MyPet);// put the animal in the map
+				this.animalList.add(MyPet); // add the same animal in a list in order to get an easy access 
 			} else {
 				TheGblVars.echoDebug(2, "The " + type + " number " + (j+1) + 
 						" is not generated because of unfound empty room");
 			}
-			
 		}
 	}
 
+
 	/**
-	 *  determines the speed of each kind of actor
-	 * @param type
-	 * @return the speed
-	 * 
-	 * The speed value must be less than min of the length and height of the map
+	 *  Update the animal list and counters with the remaining animals
 	 */
-	public int theSpeed(actorType type ) {
-		int calcul = 0;
-		switch (type) {
-		case ZOMBI:
-			calcul = 1;
-			break;
-		case RAT:
-			calcul = 2;
-			break;
-		case PIGEON:
-			calcul = 3;
-			break;
-		default:
-			calcul = -1;
-			break;
+	private void remainingAnimals() {
+		//TODO check if the animal is dead, in this case remove it! and updates the counters
+		String msg = "";
+		//https://www.java67.com/2015/10/how-to-solve-concurrentmodificationexception-in-java-arraylist.html
+		/*
+		Exception in thread "main" java.util.ConcurrentModificationException
+		 
+		at java.base/java.util.ArrayList$Itr.checkForComodification(ArrayList.java:1013)
+		at java.base/java.util.ArrayList$Itr.next(ArrayList.java:967)
+		at start.Ecosystem.remainingAnimals(Ecosystem.java:176)
+		*/
+		/* le code ci-dessous génère l'erreur ci-dessus
+		for (Animal animal : this.animalList) {
+			if (animal.getLife() == 0) {
+				switch (animal.getType()) {
+				case ZOMBI:
+					this.zombiesNumber--;
+					break;
+				case RAT:
+					this.ratsNumber--;
+					break;
+				case PIGEON:
+					this.pigeonsNumber--;
+					break;
+
+				default:
+					TheGblVars.echoDebug(0, "This animal : " + animal.getId() + 
+							" has an unknown type: " + animal.getType() );
+					break;
+				}// end of switch
+				TheGblVars.echoDebug(2, "This animal : " + animal.getId() + " " + animal.getType() +
+						" is removed");
+				this.animalList.remove(animal);
+			}// end of if dead
+		}//end of for
+		*/
+		
+		for (Iterator iterator = animalList.iterator(); iterator.hasNext();) {
+			Animal animal = (Animal) iterator.next();
+			if (animal.getLife() == 0) { // is dead
+				switch (animal.getType()) {
+				case ZOMBI:
+					this.zombiesNumber--;
+					TheGblVars.echoDebug(0, "zombiesNumber : " + zombiesNumber );
+					break;
+				case RAT:
+					this.ratsNumber--;
+					TheGblVars.echoDebug(0, "ratsNumber : " + ratsNumber );
+					break;
+				case PIGEON:
+					this.pigeonsNumber--;
+					TheGblVars.echoDebug(0, "pigeonsNumber : " + pigeonsNumber );
+					break;
+
+				default:
+					TheGblVars.echoDebug(0, "This animal : " + animal.getId() + 
+							" has an unknown type: " + animal.getType() );
+					break;
+				}// end of switch
+				TheGblVars.echoDebug(2, "This animal : " + animal.getId() + " " + animal.getType() +
+						" is removed");
+				iterator.remove();
+			}// end of if dead
+		} // end of for
+		
+		//Display the remaining animals
+
+		for (Animal animal : this.animalList) {
+			msg = msg + animal.display() + animal.getId()+ " ";
 		}
-		return calcul;
-	}
-	
-	/**
-	 *  Display all the remaining animals
-	 */
-	private void showRemainingAnimals() {
-		String TheResult = "";
-		for (Animal animal : this.AnimalList) {
-			TheResult = TheResult + animal.getType()+ " ";
-		}
-		System.out.println(TheResult);
+		System.out.println("Animals presents in the ecosystem: " + msg);
 	}
 
 	/**

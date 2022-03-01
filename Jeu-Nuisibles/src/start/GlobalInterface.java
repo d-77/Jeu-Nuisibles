@@ -40,6 +40,7 @@ public interface GlobalInterface {
 
 	/**
 	 *  defines the types of actors
+	 *  The order of values is important, it used for the priorities in combat
 	 */
 	enum actorType {
 		ZOMBI,
@@ -50,7 +51,9 @@ public interface GlobalInterface {
 	/**
 	 * duration of one cycle in ms
 	 */
-	public static final long cycleDuration = 1;
+	public static final long cycleDuration = 300;
+	
+	//https://stackoverflow.com/questions/5762491/how-to-print-color-in-console-using-system-out-println
 	
 	/**
 	 * ANSI escape codes to use color
