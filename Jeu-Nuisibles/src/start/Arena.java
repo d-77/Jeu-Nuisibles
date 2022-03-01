@@ -56,6 +56,7 @@ public class Arena implements GlobalInterface  {
 		
 		//ansi escape console: colors!!!
 		// use the eclipse plugin ansi in console
+		//mihai-nita.net - http://www.mihai-nita.net/eclipse
 		
 		Animal theAnimal;
 		

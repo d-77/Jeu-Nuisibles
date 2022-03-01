@@ -127,19 +127,30 @@ public class Ecosystem implements GlobalInterface {
 	   */
 	private int[] availableRoom(){
 		
+		// manage the case of there isn't available room (or is cannot randomly found)
+		int nbAttempts = 0;
+		int maxAttempts = this.length * this.height * 10; // 10 times the map surface is a very good limit
+		
 		int[] theResult = new int[2];
 		Arena[][] m = mapArena.getArenaMap();
 		
 		int x ;
 		int y ;
 		do {
+			nbAttempts++; // stop when nbAttempts > maxAttempts
 			x = (int) (Math.random() * (this.length));
 			y = (int) (Math.random() * (this.height));
 			TheGblVars.echoDebug(4," x,y : " + x + ","+ y);
-		} while (! (m[x][y].isEmpty())); // empty condition
-		
-		theResult[0] = x;
-		theResult[1] = y;
+		} while ((! (m[x][y].isEmpty())) && (nbAttempts <= maxAttempts)); // empty condition and limited loop
+		if (m[x][y].isEmpty()) {
+			theResult[0] = x;
+			theResult[1] = y;
+		} else {
+			TheGblVars.echoDebug(2, "Error: no available room is found: the numbers of animals may be too large");
+			theResult[0] = -1;
+			theResult[1] = -1;
+		}
+
 		return theResult;
 	}
 	
@@ -155,10 +166,17 @@ public class Ecosystem implements GlobalInterface {
 		Animal MyPet;
 		for (int j = 0; j < nb; j++) {
 			theRoom = availableRoom(); 
-			//TODO manage the case of there isn't available room 
-			MyPet = new Animal(type, theSpeed(type), 1, theRoom[0], theRoom[1]);
-			m[theRoom[0]][theRoom[1]].addAnimal(MyPet); // put the animal in the map
-			this.AnimalList.add(MyPet); // add the same animal in a list in order to get an easy access 
+			// check the unavailable room case
+			if (theRoom[0] != -1) {
+				//there is an available room
+				MyPet = new Animal(type, theSpeed(type), 1, theRoom[0], theRoom[1]);
+				m[theRoom[0]][theRoom[1]].addAnimal(MyPet); // put the animal in the map
+				this.AnimalList.add(MyPet); // add the same animal in a list in order to get an easy access 
+			} else {
+				TheGblVars.echoDebug(2, "The " + type + " number " + (j+1) + 
+						" is not generated because of unfound empty room");
+			}
+			
 		}
 	}
 
