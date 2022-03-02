@@ -216,7 +216,7 @@ public class Ecosystem implements GlobalInterface {
 		//Display the remaining animals
 
 		for (Animal animal : this.animalList) {
-			msg = msg + animal.display() + animal.getId()+ " ";
+			msg = msg + animal.display() + " ";
 		}
 		System.out.println("Animals presents in the ecosystem: " + msg);
 	}

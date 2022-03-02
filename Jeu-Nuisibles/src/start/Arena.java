@@ -48,7 +48,6 @@ public class Arena implements GlobalInterface  {
 	 * @return	a representation of the status of the arena
 	 *
 	 */
-
 	public String display() {
 		
 		//ansi escape console: colors!!!
@@ -67,7 +66,7 @@ public class Arena implements GlobalInterface  {
 			if (this.animalList.size() == 1) {
 				theAnimal = this.animalList.get(0);
 				// display the animal representation with its id
-				theResult = theAnimal.display() + String.format("%02d",theAnimal.getId()); 
+				theResult = theAnimal.display(); 
 			} else { //more than 1 animal in the arena
 				theResult = ANSI_RED + displayFight(this.animalList.size())+ ANSI_RESET;
 				TheGblVars.echoDebug(4, "There are more than one animal:" + theResult);
@@ -89,6 +88,18 @@ public class Arena implements GlobalInterface  {
 		return "*"+nbAnimals.toString()+"*";
 	}
 
+ /**
+  * Display the actors in the arena, in the first instance for DEBUG purpose
+  * @return the display of each actor in a string
+  */
+	public String displayArena(){
+		String theResult ="";
+		for (Animal itr : this.animalList) {
+			theResult = theResult + itr.display() + " ";
+		}
+		return theResult;
+	}
+	
 	/**
 	 * 	add an animal into the arena
 	 */
@@ -149,14 +160,12 @@ public class Arena implements GlobalInterface  {
 		ArrayList<Animal> resultAnimalList = new ArrayList<Animal>(); //@return
 		Animal animal1, animal2; //working variables 
 
-		this.TheGblVars.echoDebug(5, "starting");
-
 		/* reminder of definition see the declaration for accurate information
-		NOTENOUGH, 			// 0 or 1 fighter => no fight
-		DEATH,				// some must die
-		ZOMBIFICATION,		// all become zombies
-		ONETEAM				// they are in the same team => no fight and no death
-		 */
+		*	NOTENOUGH, 			// 0 or 1 fighter => no fight
+		*	DEATH,				// some must die
+		*	ZOMBIFICATION,		// all become zombies
+		*	ONETEAM				// they are in the same team => no fight and no death
+		*/
 		while ((action != fightAction.NOTENOUGH) && (action != fightAction.ONETEAM)) {
 			// numbers of actors by type
 			this.TheGblVars.echoDebug(4, "the fight begins, nb of fighters: " + this.animalList.size());
@@ -171,6 +180,7 @@ public class Arena implements GlobalInterface  {
 				action = fightAction.NOTENOUGH;
 			} else {
 				// there are at least 2 actors
+				this.TheGblVars.echoDebug(3, "the arena contains the animals: " + this.displayArena());
 				// if there is only one kind of actors
 				j = 0;
 				for ( i = 0; i < countersByType.length; i++) {
@@ -306,7 +316,7 @@ public class Arena implements GlobalInterface  {
 				}
 			}
 			*/
-			// display the animal representation with its id
+			// DEBUG display the animal representation with its id
 			//theResult = theAnimal.display() + String.format("%02d",theAnimal.getId()); 
 					//TheGblVars.echoDebug(4, "There are more than one animal:" + theResult);
 			//throw new RuntimeException("This is thrown for debug purpose");

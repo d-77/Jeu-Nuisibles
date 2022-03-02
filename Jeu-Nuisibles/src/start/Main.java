@@ -13,8 +13,8 @@ public class Main implements GlobalInterface {
 		
 		TheGblVars.echoDebug(4, "starting");
 		
-		monEcosystem = new Ecosystem(10,10,3,4,
-				8,30);
+		monEcosystem = new Ecosystem(4,4,1,1,
+				1,100);
 		
 		TheGblVars.echoDebug(4, monEcosystem.toString());
 

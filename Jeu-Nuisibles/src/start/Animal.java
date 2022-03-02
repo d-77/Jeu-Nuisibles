@@ -131,16 +131,17 @@ public class Animal implements GlobalInterface {
 	public String display() {
 		
 		String theResult;
+		theResult =  String.format("%02d",this.id);
 
 		switch (this.type) {
 		case ZOMBI:
-			theResult = "Z";
+			theResult = TheGblVars.colourString(ANSI_YELLOW_BACKGROUND,"Z" + theResult );
 			break;
 		case RAT:
-			theResult = "R";
+			theResult = TheGblVars.colourString(ANSI_GREEN,"R" + theResult );
 			break;
 		case PIGEON:
-			theResult = "P";
+			theResult = TheGblVars.colourString(ANSI_BLUE,"P" + theResult );
 			break;
 		default:
 			theResult = "Error-type";

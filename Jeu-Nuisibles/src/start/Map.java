@@ -125,11 +125,15 @@ public class Map implements GlobalInterface {
 		int y_random ;
 		do {
 			nbAttempts++; // stop when nbAttempts > maxAttempts
-			x_random = (int) (Math.random() * (this.length));
-			y_random = (int) (Math.random() * (this.height));
+			// looking for a pair of coordinates at r cases from x,y
+			// IMPROVE this can be perform with animal.randomMove
+			do {
+				x_random = (int) (Math.random() * (this.length));
+				y_random = (int) (Math.random() * (this.height));
+			} while (distance(x, y, x_random, y_random) > r);
+			
 			TheGblVars.echoDebug(4," x,y : " + x_random + ","+ y_random);
 		} while ((! (arenaMap[x_random][y_random].isEmpty()))
-				&& (distance(x, y, x_random, y_random) > r)
 				&& (nbAttempts <= maxAttempts)); // empty condition and a specific area and limited loop
 		
 		if (arenaMap[x_random][y_random].isEmpty()) {
@@ -162,8 +166,7 @@ public class Map implements GlobalInterface {
 		} while ((room[0] == -1) && (r <= Math.max(this.length, this.height))); // no room found
 		
 		if (room[0] == -1) {
-		TheGblVars.echoDebug(0, "Error: no available room is found for the animal: "+ theAnimal.display() + 
-				theAnimal.getId());
+		TheGblVars.echoDebug(0, "Error: no available room is found for the animal: "+ theAnimal.display() );
 		} else {
 			
 			//remove the actor from the arena
