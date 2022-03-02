@@ -41,10 +41,10 @@ public class Map implements GlobalInterface {
 	}
 	
 	/**
-	 * add an animal into the map in the box x,y 
-	 * The coordinates are known by the actor
+	 * add an actor into the map in the box x,y 
+	 * The coordinates are known by the actor itself
 	 * 
-	 * @param dude
+	 * @param an Animal
 	 * 
 	 */
 	public void addAnimal(Animal dude) {
@@ -52,10 +52,10 @@ public class Map implements GlobalInterface {
 	}
 	
 	/**
-	 * remove an animal from the map
+	 * remove an actor from the map, but it still exists
 	 * The coordinates are known by the actor
 	 *
-	 * @param dude
+	 * @param an Animal
 	 * 
 	 */
 	public void removeAnimal(Animal dude) {
@@ -111,11 +111,10 @@ public class Map implements GlobalInterface {
 	 * @param y coord of the center of the search
 	 * @param r distance max from the center of the search
 	 *
-	 * @return theResult[0] = x; 	theResult[1] = y;
+	 * @return theResult[0] = x; theResult[1] = y; -1: no room is found
 	 * 
 	 */
 	public int[] availableRoom(int x, int y, int r){
-		//TODO move this in Map object
 		// manage the case of there isn't available room (or is cannot randomly found)
 		int nbAttempts = 0;
 		int maxAttempts = this.length * this.height * 10; // 10 times the map surface is a very good limit
@@ -124,30 +123,56 @@ public class Map implements GlobalInterface {
 		
 		int x_random ;
 		int y_random ;
-		//DCL: rajouter la condition de distance
-		//DCL modifier l'appel en rajoutant les parametres
 		do {
 			nbAttempts++; // stop when nbAttempts > maxAttempts
 			x_random = (int) (Math.random() * (this.length));
 			y_random = (int) (Math.random() * (this.height));
 			TheGblVars.echoDebug(4," x,y : " + x_random + ","+ y_random);
-		} while ((! (arenaMap[x_random][y_random].isEmpty())) && (nbAttempts <= maxAttempts)); // empty condition and limited loop
+		} while ((! (arenaMap[x_random][y_random].isEmpty()))
+				&& (distance(x, y, x_random, y_random) > r)
+				&& (nbAttempts <= maxAttempts)); // empty condition and a specific area and limited loop
 		
 		if (arenaMap[x_random][y_random].isEmpty()) {
 			theResult[0] = x_random;
 			theResult[1] = y_random;
 		} else {
 			TheGblVars.echoDebug(2, "Error: no available room is found: the numbers of animals may be too large");
-			theResult[0] = -1;
+			theResult[0] = -1; // no room is found
 			theResult[1] = -1;
 		}
 
 		return theResult;
 	}
-	
-	public void relocateAnimal(Iterator iterator) {
-		// TODO Auto-generated method stub
+	/**
+	 * move the actor to a close empty room
+	 * @param theAnimal
+	 */
+	public void relocateAnimal(Animal theAnimal) {
+
+		int r = 1;
+		int [] room = new int[2];
+		int x,y;
 		
+		x = theAnimal.getX();
+		y = theAnimal.getY();
+		
+		do {
+			room = availableRoom(x, y, r);
+			r++; // look for a room further
+		} while ((room[0] == -1) && (r <= Math.max(this.length, this.height))); // no room found
+		
+		if (room[0] == -1) {
+		TheGblVars.echoDebug(0, "Error: no available room is found for the animal: "+ theAnimal.display() + 
+				theAnimal.getId());
+		} else {
+			
+			//remove the actor from the arena
+			removeAnimal(theAnimal);
+			// move the animal to this room
+			theAnimal.setX(room[0]);
+			theAnimal.setY(room[1]);
+			addAnimal(theAnimal);
+		}
 	}
 
 	

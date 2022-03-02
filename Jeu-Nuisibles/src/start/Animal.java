@@ -169,7 +169,7 @@ public class Animal implements GlobalInterface {
 	 * @param height (the y border of the map)
 	 *
 	 */
-	public void move(int lenght, int height) {
+	public void randomMove(int lenght, int height) {
 		
 		int shift_x = 0;
 		int shift_y = 0;
@@ -196,7 +196,7 @@ public class Animal implements GlobalInterface {
 			// a zombi stays stacked to the border, until he changes of direction
 			new_x = Math.max(0, Math.min(new_x, lenght - 1));
 			new_y = Math.max(0, Math.min(new_y, height - 1));
-			// TODO should create a method for the zombi move
+			// IMPROVE: should create a method for the zombi move
 			break;
 
 		default:

@@ -7,13 +7,15 @@ public class Main implements GlobalInterface {
 		
 		//use a global variables object
 		GblVars TheGblVars = GblVars.getInstance();	
-
+		
 		Ecosystem monEcosystem;
 		
 		
 		TheGblVars.echoDebug(4, "starting");
 		
-		monEcosystem = new Ecosystem(10,10,4,4,4,300);
+		monEcosystem = new Ecosystem(10,10,3,4,
+				8,30);
+		
 		TheGblVars.echoDebug(4, monEcosystem.toString());
 
 		monEcosystem.animate();

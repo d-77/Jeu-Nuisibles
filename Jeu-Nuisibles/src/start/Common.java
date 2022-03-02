@@ -7,6 +7,9 @@ package start;
  * @author daniel.conil
  *
  */
+
+// XXX THIS CLASS IS NOT USED
+
 public abstract class Common {
 
 	/* no more used => moved in interface GlobalInterface
@@ -17,6 +20,5 @@ public abstract class Common {
 	}
 	
 	*/
-	//TODO définir les constantes des vitesses de chaque acteur
 	
 }

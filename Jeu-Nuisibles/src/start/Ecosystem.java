@@ -56,7 +56,7 @@ public class Ecosystem implements GlobalInterface {
 		ArrayList<Animal> movelList;
 
 		this.cycleCounter = 1;
-		while (noMoreCombats == false || (this.cycleCounter <= this.cycleMax)) {
+		while (noMoreCombats == false && (this.cycleCounter <= this.cycleMax)) {
 			// one cycle loop
 			this.display();
 			System.out.println(); // one line between 2 screens
@@ -64,7 +64,7 @@ public class Ecosystem implements GlobalInterface {
 			for (Animal animal : this.animalList) {
 				//remove the actor from the arena
 				this.mapArena.removeAnimal(animal);
-				animal.move(this.length,this.height);//debug purpose
+				animal.randomMove(this.length,this.height);//debug purpose
 				//add the the actor to its new arena
 				TheGblVars.echoDebug(4, "move: " + animal.displayAttributes());
 				this.mapArena.addAnimal(animal);
@@ -75,13 +75,12 @@ public class Ecosystem implements GlobalInterface {
 			this.display();
 			System.out.println(); // one line between 2 screens
 			
-			movelList = this.mapArena.launchFight(); //TODO
+			movelList = this.mapArena.launchFight(); //TODO ???
 			TheGblVars.echoDebug(2, "size of movelList: " + movelList.size());
 			//replace the animals which are several in the same place
 			for (Iterator iterator = movelList.iterator(); iterator.hasNext();) {
 				Animal animal = (Animal) iterator.next();
-				//DCL TODO 
-				mapArena.relocateAnimal(iterator);
+				mapArena.relocateAnimal(animal);
 			}
 			remainingAnimals(); //update the AnimalList after the fights
 			System.out.println(); // one line between 2 screens
@@ -151,7 +150,6 @@ public class Ecosystem implements GlobalInterface {
 	 *  Update the animal list and counters with the remaining animals
 	 */
 	private void remainingAnimals() {
-		//TODO check if the animal is dead, in this case remove it! and updates the counters
 		String msg = "";
 		//https://www.java67.com/2015/10/how-to-solve-concurrentmodificationexception-in-java-arraylist.html
 		/*
@@ -209,7 +207,7 @@ public class Ecosystem implements GlobalInterface {
 							" has an unknown type: " + animal.getType() );
 					break;
 				}// end of switch
-				TheGblVars.echoDebug(2, "This animal : " + animal.getId() + " " + animal.getType() +
+				TheGblVars.echoDebug(1, "This animal : " + animal.getId() + " " + animal.getType() +
 						" is removed");
 				iterator.remove();
 			}// end of if dead
