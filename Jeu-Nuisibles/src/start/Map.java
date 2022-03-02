@@ -170,6 +170,8 @@ public class Map implements GlobalInterface {
 		} else {
 			
 			//remove the actor from the arena
+			TheGblVars.echoDebug(1, "before remove: " + theAnimal.displayAttributes());
+
 			removeAnimal(theAnimal);
 			// move the animal to this room
 			theAnimal.setX(room[0]);

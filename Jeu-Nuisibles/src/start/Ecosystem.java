@@ -20,7 +20,7 @@ public class Ecosystem implements GlobalInterface {
 	private int cycleCounter;
 	private int cycleMax;
 	private Map mapArena;
-	private ArrayList<Animal> animalList; 
+	private ArrayList<Animal> ecoAnimalList; 
 		
 	//use a global variables object
 	private GblVars TheGblVars = GblVars.getInstance();
@@ -39,7 +39,7 @@ public class Ecosystem implements GlobalInterface {
 		this.zombiesNumber = zombiesNumber;
 		this.cycleMax = cycleMax;
 		this.mapArena = new Map(length, height);
-		this.animalList = new ArrayList<Animal>();
+		this.ecoAnimalList = new ArrayList<Animal>();
 		animalsGeneration();
 	}
 
@@ -61,8 +61,9 @@ public class Ecosystem implements GlobalInterface {
 			this.display();
 			System.out.println(); // one line between 2 screens
 			// the actors move
-			for (Animal animal : this.animalList) {
-				//remove the actor from the arena
+			for (Animal animal : this.ecoAnimalList) {
+				//remove the actor from its arena
+				TheGblVars.echoDebug(1, "before remove: " + animal.displayAttributes());
 				this.mapArena.removeAnimal(animal);
 				animal.randomMove(this.length,this.height);//debug purpose
 				//add the the actor to its new arena
@@ -75,7 +76,10 @@ public class Ecosystem implements GlobalInterface {
 			this.display();
 			System.out.println(); // one line between 2 screens
 			
-			movelList = this.mapArena.launchFight(); //TODO ???
+			movelList = this.mapArena.launchFight(); 
+			
+			//FIXME ****************!!!!!!!!!!!!!!!!!!!!!
+			
 			TheGblVars.echoDebug(2, "size of movelList: " + movelList.size());
 			//replace the animals which are several in the same place
 			for (Iterator iterator = movelList.iterator(); iterator.hasNext();) {
@@ -137,7 +141,7 @@ public class Ecosystem implements GlobalInterface {
 				//there is an available room
 				MyPet = new Animal(type, 1, theRoom[0], theRoom[1]);
 				this.mapArena.addAnimal(MyPet);// put the animal in the map
-				this.animalList.add(MyPet); // add the same animal in a list in order to get an easy access 
+				this.ecoAnimalList.add(MyPet); // add the same animal in a list in order to get an easy access 
 			} else {
 				TheGblVars.echoDebug(2, "The " + type + " number " + (j+1) + 
 						" is not generated because of unfound empty room");
@@ -185,7 +189,7 @@ public class Ecosystem implements GlobalInterface {
 		}//end of for
 		*/
 		
-		for (Iterator iterator = animalList.iterator(); iterator.hasNext();) {
+		for (Iterator iterator = ecoAnimalList.iterator(); iterator.hasNext();) {
 			Animal animal = (Animal) iterator.next();
 			if (animal.getLife() == 0) { // is dead
 				switch (animal.getType()) {
@@ -215,7 +219,7 @@ public class Ecosystem implements GlobalInterface {
 		
 		//Display the remaining animals
 
-		for (Animal animal : this.animalList) {
+		for (Animal animal : this.ecoAnimalList) {
 			msg = msg + animal.display() + " ";
 		}
 		System.out.println("Animals presents in the ecosystem: " + msg);

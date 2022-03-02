@@ -111,16 +111,17 @@ public class Arena implements GlobalInterface  {
 	 * @param Animal to remove
 	 */
 	public void removeAnimal(Animal dude) {
-		
+
 		if (! this.animalList.contains(dude)) {
 			TheGblVars.echoDebug(0," error: the animal is not in the arena\n The animal : "
 					+ dude.displayAttributes());
-		}
-		if (this.animalList.remove(dude)) {
-			TheGblVars.echoDebug(4," the animal is removed");
-		}else {
-			TheGblVars.echoDebug(0," error: the animal is not removed\n The animal : "
-					+ dude.displayAttributes());
+		} else {
+			if (this.animalList.remove(dude)) {
+				TheGblVars.echoDebug(4," the animal is removed");
+			}else {
+				TheGblVars.echoDebug(0," error: the animal is not removed\n The animal : "
+						+ dude.displayAttributes());
+			}
 		}
 	}
 	
@@ -246,14 +247,12 @@ public class Arena implements GlobalInterface  {
 					TheGblVars.echoDebug(1,"animal1 is dead and must be removed\nfrom this arena: " +
 							animal1.getX() + "," + animal1.getY() + " " + animal1.displayAttributes());
 					animal1.death();
-					resultAnimalList.add(animal1);
 					removeAnimal(animal1);
 				} else {
 					//animal2 dies
 					TheGblVars.echoDebug(1,"animal2 is dead and must be removed\nfrom this arena: " +
 							animal2.getX() + "," + animal2.getY() + " " + animal2.displayAttributes());
 					animal2.death();
-					resultAnimalList.add(animal2);
 					removeAnimal(animal2);
 				}
 				break;
