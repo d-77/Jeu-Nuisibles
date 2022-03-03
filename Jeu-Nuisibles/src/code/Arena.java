@@ -1,10 +1,10 @@
-package start;
+package code;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import start.GlobalInterface.actorType;
+import code.GlobalInterface.actorType;
 
 public class Arena implements GlobalInterface  {
 		

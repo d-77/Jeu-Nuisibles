@@ -1,7 +1,7 @@
 /**
  * 
  */
-package start;
+package code;
 
 /**
  * @author daniel.conil
@@ -30,7 +30,7 @@ public class GblVars implements GlobalInterface {
 	 * 4 anything
 	 * 5 and over: reserved, do not use (in order to do not display info with debug level >= 5 
 	 **/
-	public int dbglvl = 3;
+	public int dbglvl = 0;
 
 	/************ singleton implementation ******************/
 	private static final GblVars instance = new GblVars();

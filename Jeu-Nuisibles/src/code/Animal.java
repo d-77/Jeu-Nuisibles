@@ -1,6 +1,6 @@
-package start;
+package code;
 
-import start.GlobalInterface.actorType;
+import code.GlobalInterface.actorType;
 
 public class Animal implements GlobalInterface {
 	
@@ -110,13 +110,13 @@ public class Animal implements GlobalInterface {
 		int calcul = 0;
 		switch (type) {
 		case ZOMBI:
-			calcul = 1;
-			break;
-		case RAT:
 			calcul = 2;
 			break;
+		case RAT:
+			calcul = 6;
+			break;
 		case PIGEON:
-			calcul = 3;
+			calcul = 8;
 			break;
 		default:
 			calcul = -1;

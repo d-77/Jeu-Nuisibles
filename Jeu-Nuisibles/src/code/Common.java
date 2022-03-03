@@ -1,7 +1,7 @@
 /**
  * 
  */
-package start;
+package code;
 
 /**
  * @author daniel.conil

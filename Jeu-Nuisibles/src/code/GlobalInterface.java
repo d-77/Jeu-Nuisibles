@@ -1,4 +1,4 @@
-package start;
+package code;
 
 /*
  * 
@@ -61,11 +61,6 @@ public interface GlobalInterface {
 	}
 	
 	public static int nbTypes = actorType.values().length;
-	
-	/**
-	 * duration of one cycle in ms
-	 */
-	public static long cycleDuration = 1;
 	
 	//https://stackoverflow.com/questions/5762491/how-to-print-color-in-console-using-system-out-println
 	

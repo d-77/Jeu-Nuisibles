@@ -1,4 +1,4 @@
-package start;
+package code;
 
 public class Main implements GlobalInterface {
 
@@ -13,8 +13,8 @@ public class Main implements GlobalInterface {
 		
 		TheGblVars.echoDebug(4, "starting");
 		
-		monEcosystem = new Ecosystem(4,4,1,0,
-				4,300);
+		monEcosystem = new Ecosystem(24,20,15,15,
+				1,300);
 		
 		TheGblVars.echoDebug(4, monEcosystem.toString());
 

@@ -1,4 +1,4 @@
-package start;
+package code;
 
 //import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -29,6 +29,7 @@ public class Ecosystem implements GlobalInterface {
 	private int height;
 	private int cycleCounter;
 	private int cycleMax;
+	public static long cycleDuration = 400; // duration of one cycle in ms
 	private Map mapArena;
 	private ArrayList<Animal> ecoAnimalList; 
 	
@@ -111,7 +112,6 @@ public class Ecosystem implements GlobalInterface {
 			if (this.actorsNumber[actorType.RAT.ordinal()] > 0) {nbAlivePopulations++;} 
 			if (this.actorsNumber[actorType.PIGEON.ordinal()] > 0) {nbAlivePopulations++;}
 			moreCombats = (nbAlivePopulations > 1); //if there is only one kind of actors: they can't fight themselves
-			//FIXME : the counters may be corrupted, it doesn't stop when it remains only one kind of actors 
 			
 			this.cycleCounter++;
 			// wait cycleDuration ms
@@ -179,14 +179,17 @@ public class Ecosystem implements GlobalInterface {
 	 */
 	private void remainingAnimals() {
 		String msg = "";
+		
 		//https://www.java67.com/2015/10/how-to-solve-concurrentmodificationexception-in-java-arraylist.html
+		
 		/*
 		Exception in thread "main" java.util.ConcurrentModificationException
-		 
+
 		at java.base/java.util.ArrayList$Itr.checkForComodification(ArrayList.java:1013)
 		at java.base/java.util.ArrayList$Itr.next(ArrayList.java:967)
 		at start.Ecosystem.remainingAnimals(Ecosystem.java:176)
-		*/
+		 */
+		
 		/* le code ci-dessous génère l'erreur ci-dessus
 		for (Animal animal : this.animalList) {
 			if (animal.getLife() == 0) {
@@ -249,7 +252,7 @@ public class Ecosystem implements GlobalInterface {
 		for (Animal animal : this.ecoAnimalList) {
 			msg = msg + animal.display() + " ";
 		}
-		System.out.println("Animals presents in the ecosystem: " + msg);
+		System.out.println(msg + "still alive");
 	}
 
 	/**
