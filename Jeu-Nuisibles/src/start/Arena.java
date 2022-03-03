@@ -69,7 +69,8 @@ public class Arena implements GlobalInterface  {
 				theResult = theAnimal.display(); 
 			} else { //more than 1 animal in the arena
 				theResult = ANSI_RED + displayFight(this.animalList.size())+ ANSI_RESET;
-				TheGblVars.echoDebug(4, "There are more than one animal:" + theResult);
+				TheGblVars.echoDebug(4, "There are more than one animal:" + theResult +
+						"\n" + this.displayArena());
 				//throw new RuntimeException("This is thrown for debug purpose");
 			}
 		} // end of if this.animalList.isEmpty()
@@ -113,13 +114,13 @@ public class Arena implements GlobalInterface  {
 	public void removeAnimal(Animal dude) {
 
 		if (! this.animalList.contains(dude)) {
-			TheGblVars.echoDebug(0," error: the animal is not in the arena\n The animal : "
+			TheGblVars.echoDebug(4,"the animal is not in the arena, no need to removed\n The animal : "
 					+ dude.displayAttributes());
 		} else {
 			if (this.animalList.remove(dude)) {
-				TheGblVars.echoDebug(4," the animal is removed");
+				TheGblVars.echoDebug(4,"the animal is removed");
 			}else {
-				TheGblVars.echoDebug(0," error: the animal is not removed\n The animal : "
+				TheGblVars.echoDebug(0,"error002: the animal is not removed\n The animal : "
 						+ dude.displayAttributes());
 			}
 		}
@@ -156,7 +157,7 @@ public class Arena implements GlobalInterface  {
 
 		fightAction action = fightAction.DEATH; 
 		int [] countersByType;
-		countersByType = new int[actorType.values().length];
+		countersByType = new int[nbTypes];
 		int i,j; //working indexes
 		ArrayList<Animal> resultAnimalList = new ArrayList<Animal>(); //@return
 		Animal animal1, animal2; //working variables 
@@ -211,8 +212,15 @@ public class Arena implements GlobalInterface  {
 				// if there is one zombie, all become zombies
 				// the first zombie stays in the arena, the others move to an adjacent room
 
+				// the counters of zombies must be incremented and the others must be decremented		
 				for (Animal theAnimal : this.animalList) {
-					theAnimal.transform(actorType.ZOMBI);
+					this.TheGblVars.echoDebug(1, "case ZOMBIFICATION:  animals: " + theAnimal.display());
+
+					if (theAnimal.getType() != actorType.ZOMBI) {
+						Ecosystem.actorsNumber[actorType.ZOMBI.ordinal()]++;
+						Ecosystem.actorsNumber[theAnimal.getType().ordinal()]--;
+						theAnimal.transform(actorType.ZOMBI);
+					}
 				}
 				action = fightAction.ONETEAM; // a team of zombies
 
@@ -230,8 +238,6 @@ public class Arena implements GlobalInterface  {
 				break;
 
 			case DEATH:
-
-				//DCL wait for validation		
 				
 				// perform one fight between the 2 first actors of different kind				
 				animal1 = this.animalList.get(0);
@@ -243,7 +249,6 @@ public class Arena implements GlobalInterface  {
 				
 				if (Math.random() > 0.5 ) {
 					//animal1 dies
-					//TODO remove also of the list in the ecosystem
 					TheGblVars.echoDebug(1,"animal1 is dead and must be removed\nfrom this arena: " +
 							animal1.getX() + "," + animal1.getY() + " " + animal1.displayAttributes());
 					animal1.death();
@@ -262,65 +267,6 @@ public class Arena implements GlobalInterface  {
 			}
 		}
 
-		/**************
-		
-		// if there is one zombi, all become zombies
-		// the first zomby stays in the arena, the others move to an adjacent room
-
-		if (countersByType[actorType.ZOMBI.ordinal()] > 0) {
-			for (Animal theAnimal : this.animalList) {
-				theAnimal.transform(actorType.ZOMBI);
-			}
-			//copy the last n-1 animals in resultAnimalList
-			resultAnimalList.addAll( this.animalList.subList(1, this.animalList.size() ) );
-			this.TheGblVars.echoDebug(1, "Zombi resultAnimalList: " + resultAnimalList.toString());
-			// remove the n-1 animals of the list
-			this.animalList.subList(1, this.animalList.size() ).clear();
-			this.TheGblVars.echoDebug(1, "only the first this.animalList: " + this.animalList.toString());
-		} else {// zombi free
-
-		}
-			// FIXME !!!
-	
-			
-			while ((action != fightAction.NOTENOUGH) && (action != fightAction.ONETEAM)) {
-			
-			animal1 = this.animalList.get(0);
-			animal2 = this.animalList.get(1); //DCL en erreur car ça fonctionne!!!
-			if ((animal1.getType() == actorType.ZOMBI) ||  (animal2.getType() == actorType.ZOMBI)){
-				// the 2 actors become zombies, even they were already zombies ...
-				animal1.transform(actorType.ZOMBI);
-				animal2.transform(actorType.ZOMBI);
-				// move animal2 in an adjacent empty room
-				resultAnimalList.add(animal2);
-			    // remove it from this arena
-				TheGblVars.echoDebug(0,"A zombi must be moved from this arena: " +
-			    animal2.getX() + "," + animal2.getY() + " " + animal2.displayAttributes());
-				this.removeAnimal(animal2);
-				
-			}else { // the 2 actors are not zombies, one must die
-				if (Math.random() > 0.5 ) {
-					//animal1 dies
-					//TODO remove also of the list in the ecosystem
-					TheGblVars.echoDebug(0,"animal1 is dead and must be removed\nfrom this arena: " +
-						    animal1.getX() + "," + animal1.getY() + " " + animal1.displayAttributes());
-					animal1.death();
-					removeAnimal(animal1);
-				} else {
-					//animal2 dies
-					TheGblVars.echoDebug(0,"animal2 is dead and must be removed\nfrom this arena: " +
-						    animal2.getX() + "," + animal2.getY() + " " + animal2.displayAttributes());
-					animal2.death();
-					removeAnimal(animal2);
-				}
-			}
-			*/
-			// DEBUG display the animal representation with its id
-			//theResult = theAnimal.display() + String.format("%02d",theAnimal.getId()); 
-					//TheGblVars.echoDebug(4, "There are more than one animal:" + theResult);
-			//throw new RuntimeException("This is thrown for debug purpose");
-		//} end of while this.animalList.size() > 1
-		
 		return resultAnimalList;
 	} 
 

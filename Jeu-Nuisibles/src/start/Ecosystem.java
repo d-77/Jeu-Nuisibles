@@ -12,18 +12,25 @@ import java.util.Iterator;
  */
 public class Ecosystem implements GlobalInterface {
 	
+	//use a global object
+	private GblVars TheGblVars = GblVars.getInstance();
+	
+	/*
+	 * Class variables
+	 */
+	
+	static int [] actorsNumber = new int[nbTypes];
+	
+	/*
+	 * attributes
+	 */
+	
 	private int length;
 	private int height;
-	private int	ratsNumber;
-	private int pigeonsNumber;
-	private int zombiesNumber;
 	private int cycleCounter;
 	private int cycleMax;
 	private Map mapArena;
 	private ArrayList<Animal> ecoAnimalList; 
-		
-	//use a global variables object
-	private GblVars TheGblVars = GblVars.getInstance();
 	
 	/* 
 	 * Constructors
@@ -34,9 +41,15 @@ public class Ecosystem implements GlobalInterface {
 			int cycleMax) {
 		this.length = length;
 		this.height = height;
-		this.ratsNumber = ratsNumber;
-		this.pigeonsNumber = pigeonsNumber;
-		this.zombiesNumber = zombiesNumber;
+		
+		// IMPROVE access in a static way
+		// https://www.google.fr/search?q=java+the+static+field+should+be+accessed+in+a+static+way&ei=gPUfYuWJCrPO7_UPreS7kAM&ved=0ahUKEwjlyau-wqj2AhUz57sIHS3yDjIQ4dUDCA4&uact=5&oq=java+the+static+field+should+be+accessed+in+a+static+way&gs_lcp=Cgdnd3Mtd2l6EAMyBwgAEEcQsAMyBwgAEEcQsAMyBwgAEEcQsAMyBwgAEEcQsAMyBwgAEEcQsAMyBwgAEEcQsAMyBwgAEEcQsAMyBwgAEEcQsANKBAhBGABKBAhGGABQsAZY340CYOWTAmgBcAF4AIABAIgBAJIBAJgBAKABAcgBCMABAQ&sclient=gws-wiz
+		
+		// IMPROVE the counters of actors should be updated in the generateActors method
+		// instead of be set in the constructor
+		this.actorsNumber[actorType.RAT.ordinal()]    = ratsNumber;
+		this.actorsNumber[actorType.PIGEON.ordinal()] = pigeonsNumber;
+		this.actorsNumber[actorType.ZOMBI.ordinal()]  = zombiesNumber;
 		this.cycleMax = cycleMax;
 		this.mapArena = new Map(length, height);
 		this.ecoAnimalList = new ArrayList<Animal>();
@@ -51,12 +64,13 @@ public class Ecosystem implements GlobalInterface {
 	 * animate the ecosystem until the end (no more combats or cyleMax is reached
 	 */
 	public void animate() {
-		boolean noMoreCombats = false;
+		boolean moreCombats = true;
 		int nbAlivePopulations = 3;
-		ArrayList<Animal> movelList;
+		ArrayList<Animal> moveList;
+		int i;
 
 		this.cycleCounter = 1;
-		while (noMoreCombats == false && (this.cycleCounter <= this.cycleMax)) {
+		while (moreCombats == true && (this.cycleCounter <= this.cycleMax)) {
 			// one cycle loop
 			this.display();
 			System.out.println(); // one line between 2 screens
@@ -76,28 +90,34 @@ public class Ecosystem implements GlobalInterface {
 			this.display();
 			System.out.println(); // one line between 2 screens
 			
-			movelList = this.mapArena.launchFight(); 
+			moveList = this.mapArena.launchFight(); 
 			
-			//FIXME ****************!!!!!!!!!!!!!!!!!!!!!
+			TheGblVars.echoDebug(2, "size of movelList: " + moveList.size());
 			
-			TheGblVars.echoDebug(2, "size of movelList: " + movelList.size());
-			//replace the animals which are several in the same place
-			for (Iterator iterator = movelList.iterator(); iterator.hasNext();) {
-				Animal animal = (Animal) iterator.next();
-				mapArena.relocateAnimal(animal);
+			//move the animals because they are too many in the same place
+			
+			for (i = 0; i < moveList.size(); i++) {
+				TheGblVars.echoDebug(1," the " + i + " animal of moveList: "
+						+ moveList.get(i).displayAttributes());
+				mapArena.relocateAnimal(moveList.get(i));  //IMPROVE in case of zombification there is a tentative to remove an object which isn't part of the list
 			}
+
 			remainingAnimals(); //update the AnimalList after the fights
 			System.out.println(); // one line between 2 screens
 			
-			if (zombiesNumber > 0) {nbAlivePopulations = 1;} else {nbAlivePopulations = 0;}
-			if (ratsNumber > 0) {nbAlivePopulations++;} 
-			if (pigeonsNumber > 0) {nbAlivePopulations++;}
-			noMoreCombats = (nbAlivePopulations == 1); //there is only on kind of actors: they can't fight themselves
+			//IMPROVE with Mat.min(1, population number
+			
+			if (this.actorsNumber[actorType.ZOMBI.ordinal()] > 0) {nbAlivePopulations = 1;} else {nbAlivePopulations = 0;}
+			if (this.actorsNumber[actorType.RAT.ordinal()] > 0) {nbAlivePopulations++;} 
+			if (this.actorsNumber[actorType.PIGEON.ordinal()] > 0) {nbAlivePopulations++;}
+			moreCombats = (nbAlivePopulations > 1); //if there is only one kind of actors: they can't fight themselves
+			//FIXME : the counters may be corrupted, it doesn't stop when it remains only one kind of actors 
 			
 			this.cycleCounter++;
 			// wait cycleDuration ms
 			try  { Thread.sleep(cycleDuration); } catch (Exception e)  { } 
-		}	
+		} // end of while
+		this.display(); // displays the last state of the ecosystem
 	}
 	
 	/* 
@@ -106,8 +126,10 @@ public class Ecosystem implements GlobalInterface {
 	 */
 	public void display()
 	{
-		System.out.println("Cycle " + cycleCounter + ", nb-z: " + zombiesNumber + ", nb-r: " + ratsNumber  +
-				", nb-p: " +  pigeonsNumber );
+		System.out.println("Cycle " + cycleCounter + ", nb-z: " + 
+				this.actorsNumber[actorType.ZOMBI.ordinal()] +
+				", nb-r: " + this.actorsNumber[actorType.RAT.ordinal()] +
+				", nb-p: " + this.actorsNumber[actorType.PIGEON.ordinal()] );
 		mapArena.display();
 	}
 	
@@ -119,11 +141,11 @@ public class Ecosystem implements GlobalInterface {
 		// initialization of the map
 						
 		// generation of ratsNumber rats,  pigeonsNumber, zombiesNumber
-		this.generateActors(actorType.RAT, ratsNumber);
-		this.generateActors(actorType.PIGEON, pigeonsNumber);
-		this.generateActors(actorType.ZOMBI, zombiesNumber);
+		this.generateActors(actorType.RAT, this.actorsNumber[actorType.RAT.ordinal()]);
+		this.generateActors(actorType.PIGEON, this.actorsNumber[actorType.PIGEON.ordinal()]);
+		this.generateActors(actorType.ZOMBI, this.actorsNumber[actorType.ZOMBI.ordinal()]);
 	}
-	
+
 	/**
 	 *  Generates n actors of one type and set them in available rooms into the map
 	 * @param type
@@ -131,6 +153,8 @@ public class Ecosystem implements GlobalInterface {
 	 */
 	private void generateActors(actorType type, int nb) {
 
+		// IMPROVE the counters of actors should be updated in this method
+		// instead of be set in the constructor
 		int[] theRoom = new int[2];
 		Animal MyPet;
 		for (int j = 0; j < nb; j++) {
@@ -194,20 +218,23 @@ public class Ecosystem implements GlobalInterface {
 			if (animal.getLife() == 0) { // is dead
 				switch (animal.getType()) {
 				case ZOMBI:
-					this.zombiesNumber--;
-					TheGblVars.echoDebug(0, "zombiesNumber : " + zombiesNumber );
+					this.actorsNumber[actorType.ZOMBI.ordinal()]--;
+					TheGblVars.echoDebug(2, "zombiesNumber : " + 
+					this.actorsNumber[actorType.ZOMBI.ordinal()] );
 					break;
 				case RAT:
-					this.ratsNumber--;
-					TheGblVars.echoDebug(0, "ratsNumber : " + ratsNumber );
+					this.actorsNumber[actorType.RAT.ordinal()]--;
+					TheGblVars.echoDebug(2, "ratsNumber : " + 
+					this.actorsNumber[actorType.RAT.ordinal()] );
 					break;
 				case PIGEON:
-					this.pigeonsNumber--;
-					TheGblVars.echoDebug(0, "pigeonsNumber : " + pigeonsNumber );
+					this.actorsNumber[actorType.PIGEON.ordinal()]--;
+					TheGblVars.echoDebug(2, "pigeonsNumber : " + 
+					this.actorsNumber[actorType.PIGEON.ordinal()] );
 					break;
 
 				default:
-					TheGblVars.echoDebug(0, "This animal : " + animal.getId() + 
+					TheGblVars.echoDebug(2, "This animal : " + animal.getId() + 
 							" has an unknown type: " + animal.getType() );
 					break;
 				}// end of switch
@@ -242,22 +269,13 @@ public class Ecosystem implements GlobalInterface {
 		this.height = height;
 	}
 	public int getRatsNumber() {
-		return ratsNumber;
-	}
-	public void setRatsNumber(int ratsNumber) {
-		this.ratsNumber = ratsNumber;
+		return this.actorsNumber[actorType.RAT.ordinal()];
 	}
 	public int getPigeonsNumber() {
-		return pigeonsNumber;
-	}
-	public void setPigeonsNumber(int pigeonsNumber) {
-		this.pigeonsNumber = pigeonsNumber;
+		return this.actorsNumber[actorType.PIGEON.ordinal()];
 	}
 	public int getZombiesNumber() {
-		return zombiesNumber;
-	}
-	public void setZombiesNumber(int zombiesNumber) {
-		this.zombiesNumber = zombiesNumber;
+		return this.actorsNumber[actorType.ZOMBI.ordinal()];
 	}
 	public int getCycleCounter() { return cycleCounter; } 
 	// must not be used	  public void setCycleCounter(int cycleCounter) { this.cycleCounter = cycleCounter; }

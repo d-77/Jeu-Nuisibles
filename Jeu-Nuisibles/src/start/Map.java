@@ -126,7 +126,7 @@ public class Map implements GlobalInterface {
 		do {
 			nbAttempts++; // stop when nbAttempts > maxAttempts
 			// looking for a pair of coordinates at r cases from x,y
-			// IMPROVE this can be perform with animal.randomMove
+			// IMPROVE this can be performed with animal.randomMove
 			do {
 				x_random = (int) (Math.random() * (this.length));
 				y_random = (int) (Math.random() * (this.height));
@@ -166,17 +166,17 @@ public class Map implements GlobalInterface {
 		} while ((room[0] == -1) && (r <= Math.max(this.length, this.height))); // no room found
 		
 		if (room[0] == -1) {
-		TheGblVars.echoDebug(0, "Error: no available room is found for the animal: "+ theAnimal.display() );
+		TheGblVars.echoDebug(0, "Error003: no available room is found for the animal: "+ theAnimal.display() );
 		} else {
 			
 			//remove the actor from the arena
 			TheGblVars.echoDebug(1, "before remove: " + theAnimal.displayAttributes());
 
-			removeAnimal(theAnimal);
+			this.removeAnimal(theAnimal); //IMPROVE in case of zombification there is a tentative to remove an object which isn't part of the list
 			// move the animal to this room
 			theAnimal.setX(room[0]);
 			theAnimal.setY(room[1]);
-			addAnimal(theAnimal);
+			this.addAnimal(theAnimal);
 		}
 	}
 

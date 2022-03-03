@@ -60,10 +60,12 @@ public interface GlobalInterface {
 		ONETEAM				// they are in the same team => no fight and no death
 	}
 	
+	public static int nbTypes = actorType.values().length;
+	
 	/**
 	 * duration of one cycle in ms
 	 */
-	public static final long cycleDuration = 1;
+	public static long cycleDuration = 1;
 	
 	//https://stackoverflow.com/questions/5762491/how-to-print-color-in-console-using-system-out-println
 	

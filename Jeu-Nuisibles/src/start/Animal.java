@@ -40,7 +40,7 @@ public class Animal implements GlobalInterface {
 		if (countersByType == null) {
 			TheGblVars.echoDebug(4, "countersByType instantiation");
 			// create an array of counters for each type of actors
-			countersByType = new int[actorType.values().length];
+			countersByType = new int[nbTypes];
 			//initialise the counters to 0
 			for (int i : countersByType) { countersByType[i] = 0; }
 		}
@@ -249,7 +249,7 @@ public class Animal implements GlobalInterface {
 	public void transform(actorType type ) {
 		
 		if(!this.type.equals(type) ) {
-			TheGblVars.echoDebug(0,"transform the animal : " + this.id + " from : " + this.type + " to " + type);
+			TheGblVars.echoDebug(1,"transform the animal : " + this.id + " from : " + this.type + " to " + type);
 			this.type = type;
 			this.speed = theSpeed(type);
 			// set a new id in its new type
