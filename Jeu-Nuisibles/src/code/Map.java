@@ -127,6 +127,11 @@ public class Map implements GlobalInterface {
 			nbAttempts++; // stop when nbAttempts > maxAttempts
 			// looking for a pair of coordinates at r cases from x,y
 			// IMPROVE this can be performed with animal.randomMove
+			
+			//IMPROVE use java.util.Random
+			//Random rr = new Random();
+			//rr.nextInt();
+			
 			do {
 				x_random = (int) (Math.random() * (this.length));
 				y_random = (int) (Math.random() * (this.height));

@@ -29,7 +29,7 @@ public class Ecosystem implements GlobalInterface {
 	private int height;
 	private int cycleCounter;
 	private int cycleMax;
-	public static long cycleDuration = 400; // duration of one cycle in ms
+	public static long cycleDuration = 0; // duration of one cycle in ms
 	private Map mapArena;
 	private ArrayList<Animal> ecoAnimalList; 
 	

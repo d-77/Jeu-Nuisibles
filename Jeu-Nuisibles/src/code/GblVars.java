@@ -1,21 +1,15 @@
 /**
- * 
- */
-package code;
-
-/**
- * @author daniel.conil
- *
- */
-/**
  * defines the public attributes that can be used as global variables
  * 
  * singleton implementation
  * 
  * to instantiate the object : GblVars TheGblVars = GblVars.getInstance();
  * write this action at the begining of each class that needs to acces to the global variables
- * 
+ *  @author daniel.conil
+ *  
  */
+package code;
+
 public class GblVars implements GlobalInterface {
 
 	// implements the signleton patern
@@ -73,8 +67,8 @@ public class GblVars implements GlobalInterface {
 	
 	/**
 	 * display debug info with the calling method as prefix
-	 *  5 => the debug msg is not displayed
-	 *  IMPROVE: add colour parameter, and a different colour by debug level
+	 * 5 => the debug msg is not displayed
+	 * IMPROVE: add colour parameter that supersedes the colour associated to the debug level
 	 * @param levelDebug
 	 * @param msg
 	 */

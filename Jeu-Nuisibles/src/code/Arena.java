@@ -266,7 +266,6 @@ public class Arena implements GlobalInterface  {
 				break;
 			}
 		}
-
 		return resultAnimalList;
 	} 
 

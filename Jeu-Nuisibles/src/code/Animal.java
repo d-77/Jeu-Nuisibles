@@ -1,5 +1,7 @@
 package code;
 
+import java.util.Random;
+
 import code.GlobalInterface.actorType;
 
 public class Animal implements GlobalInterface {
@@ -178,6 +180,10 @@ public class Animal implements GlobalInterface {
 		int new_x;
 		int new_y;
 		
+		//IMPROVE use java.util.Random
+		//Random rr = new Random();
+		//rr.nextInt();
+
 		if ((Math.random() - 0.5) >= 0) {
 			direction_y = 1;
 		} else {
